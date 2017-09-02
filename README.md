@@ -16,7 +16,6 @@
 * Francisco Figueroa ([figueroafe](https://github.com/figueroafe))
 * Jonatan Medrano ([jonatanMedrano](https://github.com/jonatanMedrano))
 * Julieta Foglia ([julieta-foglia](https://github.com/julieta-foglia))
-* Lucas Matias Gomez Gonzalez ([lucasmatiasgg](https://github.com/lucasmatiasgg))
 * Marcos Cabrera Torrico ([MarcosCabreraTorrico](https://github.com/MarcosCabreraTorrico))
 * Octavio Frutos ([of-utos](https://github.com/of-utos))
 * Ramiro Laurenzzo ([RLaurenzzo](https://github.com/RLaurenzzo))
