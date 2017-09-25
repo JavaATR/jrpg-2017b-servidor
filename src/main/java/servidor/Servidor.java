@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import mensajeria.PaqueteEnemigo;
 import mensajeria.PaqueteMensaje;
 import mensajeria.PaqueteMovimiento;
 import mensajeria.PaquetePersonaje;
@@ -31,6 +32,9 @@ public class Servidor extends Thread {
 	
 	private static Map<Integer, PaqueteMovimiento> ubicacionPersonajes = new HashMap<>();
 	private static Map<Integer, PaquetePersonaje> personajesConectados = new HashMap<>();
+	
+	private static Map<Integer, PaqueteMovimiento> ubicacionEnemigos = new HashMap<>();
+	private static Map<Integer, PaqueteEnemigo> enemigosConectados = new HashMap<>();
 
 	private static Thread server;
 	
@@ -225,6 +229,14 @@ public class Servidor extends Thread {
 	
 	public static Map<Integer, PaquetePersonaje> getPersonajesConectados() {
 		return personajesConectados;
+	}
+	
+	public static Map<Integer, PaqueteMovimiento> getUbicacionEnemigos() {
+		return ubicacionEnemigos;
+	}
+	
+	public static Map<Integer, PaqueteEnemigo> getEnemigosConectados() {
+		return enemigosConectados;
 	}
 
 	public static Conector getConector() {
