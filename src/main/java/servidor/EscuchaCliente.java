@@ -19,30 +19,89 @@ import mensajeria.PaqueteMovimiento;
 import mensajeria.PaquetePersonaje;
 import mensajeria.PaqueteUsuario;
 
+/**
+ * Clase que administra la escucha del cliente. <br>
+ */
 public class EscuchaCliente extends Thread {
-
+	/**
+	 * Socket
+	 */
 	private final Socket socket;
+	/**
+	 * Entrada. <br>
+	 */
 	private final ObjectInputStream entrada;
+	/**
+	 * Salida. <br>
+	 */
 	private final ObjectOutputStream salida;
+	/**
+	 * ID del personaje. <br>
+	 */
 	private int idPersonaje;
+	/**
+	 * Gson. <br>
+	 */
 	private final Gson gson = new Gson();
-	
+	/**
+	 * Paquete de personaje del cliente. <br>
+	 */
 	private PaquetePersonaje paquetePersonaje;
+	/**
+	 * Paquete de movimiento del cliente. <br>
+	 */
 	private PaqueteMovimiento paqueteMovimiento;
+	/**
+	 * Paquete de batalla del cliente. <br>
+	 */
 	private PaqueteBatalla paqueteBatalla;
+	/**
+	 * Paquete de atacar del cliente. <br>
+	 */
 	private PaqueteAtacar paqueteAtacar;
+	/**
+	 * Paquete de finalizar batalla del cliente. <br>
+	 */
 	private PaqueteFinalizarBatalla paqueteFinalizarBatalla;
+	/**
+	 * Paquete de usuario del cliente. <br>
+	 */
 	private PaqueteUsuario paqueteUsuario;
+	/**
+	 * Paquete de movimiento del cliente. <br>
+	 */
 	private PaqueteDeMovimientos paqueteDeMovimiento;
+	/**
+	 * Paquete de personajes del cliente. <br>
+	 */
 	private PaqueteDePersonajes paqueteDePersonajes;
 
-	public EscuchaCliente(String ip, Socket socket, ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+	/**
+	 * Crea un escucha del cliente. <br>
+	 * 
+	 * @param ip
+	 *            IP del cliente. <br>
+	 * @param socket
+	 *            Socket del cliente. <br>
+	 * @param entrada
+	 *            Entrada. <br>
+	 * @param salida
+	 *            Salida. <br>
+	 * @throws IOException
+	 *             En caso de error, sale. <br>
+	 */
+	public EscuchaCliente(final String ip, final Socket socket, final ObjectInputStream entrada,
+			final ObjectOutputStream salida) throws IOException {
 		this.socket = socket;
 		this.entrada = entrada;
 		this.salida = salida;
 		paquetePersonaje = new PaquetePersonaje();
 	}
 
+	/**
+	 * Conecta al cliente al juego. Lo desconecta una vez finalizada su
+	 * conexión. <br>
+	 */
 	public void run() {
 		try {
 			ComandosServer comand;
@@ -51,17 +110,14 @@ public class EscuchaCliente extends Thread {
 			paqueteUsuario = new PaqueteUsuario();
 
 			String cadenaLeida = (String) entrada.readObject();
-		
-			while (!((paquete = gson.fromJson(cadenaLeida, Paquete.class)).getComando() == Comando.DESCONECTAR)){
-								
 
+			while (!((paquete = gson.fromJson(cadenaLeida, Paquete.class)).getComando() == Comando.DESCONECTAR)) {
 				comand = (ComandosServer) paquete.getObjeto(Comando.NOMBREPAQUETE);
 				comand.setCadena(cadenaLeida);
 				comand.setEscuchaCliente(this);
 				comand.ejecutar();
 				cadenaLeida = (String) entrada.readObject();
 			}
-
 			entrada.close();
 			salida.close();
 			socket.close();
@@ -80,91 +136,206 @@ public class EscuchaCliente extends Thread {
 
 		} catch (IOException | ClassNotFoundException e) {
 			Servidor.log.append("Error de conexion: " + e.getMessage() + System.lineSeparator());
-		} 
+		}
 	}
-	
+
+	/**
+	 * Devuelve el socket del cliente. <br>
+	 * 
+	 * @return Socket del cliente. <br>
+	 */
 	public Socket getSocket() {
 		return socket;
 	}
-	
+
+	/**
+	 * Devuelve la entrada. <br>
+	 * 
+	 * @return Entrada. <br>
+	 */
 	public ObjectInputStream getEntrada() {
 		return entrada;
 	}
-	
+
+	/**
+	 * Devuelve la salida. <br>
+	 * 
+	 * @return Salida. <br>
+	 */
 	public ObjectOutputStream getSalida() {
 		return salida;
 	}
-	
-	public PaquetePersonaje getPaquetePersonaje(){
+
+	/**
+	 * Obtiene el personaje del cliente. <br>
+	 * 
+	 * @return Personaje del cliente. <br>
+	 */
+	public PaquetePersonaje getPaquetePersonaje() {
 		return paquetePersonaje;
 	}
-	
+
+	/**
+	 * Devuelve el ID del personaje del cliente. <br>
+	 * 
+	 * @return ID del personaje. <br>
+	 */
 	public int getIdPersonaje() {
 		return idPersonaje;
 	}
 
+	/**
+	 * Devuelve los movimientos del personaje. <br>
+	 * 
+	 * @return Movimientos del personaje. <br>
+	 */
 	public PaqueteMovimiento getPaqueteMovimiento() {
 		return paqueteMovimiento;
 	}
 
-	public void setPaqueteMovimiento(PaqueteMovimiento paqueteMovimiento) {
+	/**
+	 * Establece los movimiento del personaje. <br>
+	 * 
+	 * @param paqueteMovimiento
+	 *            Movimientos del personaje. <br>
+	 */
+	public void setPaqueteMovimiento(final PaqueteMovimiento paqueteMovimiento) {
 		this.paqueteMovimiento = paqueteMovimiento;
 	}
 
+	/**
+	 * Devuelve la batalla del cliente. <br>
+	 * 
+	 * @return Batalla del cliente. <br>
+	 */
 	public PaqueteBatalla getPaqueteBatalla() {
 		return paqueteBatalla;
 	}
 
-	public void setPaqueteBatalla(PaqueteBatalla paqueteBatalla) {
+	/**
+	 * Establece la batalla del cliente. <br>
+	 * 
+	 * @param paqueteBatalla
+	 *            Batalla del cliente. <br>
+	 */
+	public void setPaqueteBatalla(final PaqueteBatalla paqueteBatalla) {
 		this.paqueteBatalla = paqueteBatalla;
 	}
 
+	/**
+	 * Devuelve el ataque del personaje. <br>
+	 * 
+	 * @return Ataque del personaje. <br>
+	 */
 	public PaqueteAtacar getPaqueteAtacar() {
 		return paqueteAtacar;
 	}
 
-	public void setPaqueteAtacar(PaqueteAtacar paqueteAtacar) {
+	/**
+	 * Establece el ataque del personaje. <br>
+	 * 
+	 * @param paqueteAtacar
+	 *            Ataque del personaje. <br>
+	 */
+	public void setPaqueteAtacar(final PaqueteAtacar paqueteAtacar) {
 		this.paqueteAtacar = paqueteAtacar;
 	}
 
+	/**
+	 * Devuelve el finaliado de batalla del personaje. <br>
+	 * 
+	 * @return Finalizado de batalla del personaje. <br>
+	 */
 	public PaqueteFinalizarBatalla getPaqueteFinalizarBatalla() {
 		return paqueteFinalizarBatalla;
 	}
 
-	public void setPaqueteFinalizarBatalla(PaqueteFinalizarBatalla paqueteFinalizarBatalla) {
+	/**
+	 * Establece el finalizado de batalla del personaje. <br>
+	 * 
+	 * @param paqueteFinalizarBatalla
+	 *            Finalizado de batalla del personaje. <br>
+	 */
+	public void setPaqueteFinalizarBatalla(final PaqueteFinalizarBatalla paqueteFinalizarBatalla) {
 		this.paqueteFinalizarBatalla = paqueteFinalizarBatalla;
 	}
 
+	/**
+	 * Devuelve los movimiento y ubicación de los demás personajes con respecto
+	 * al del cliente. <br>
+	 * 
+	 * @return Movimiento y ubicación de los demás personajes. <br>
+	 */
 	public PaqueteDeMovimientos getPaqueteDeMovimiento() {
 		return paqueteDeMovimiento;
 	}
 
-	public void setPaqueteDeMovimiento(PaqueteDeMovimientos paqueteDeMovimiento) {
+	/**
+	 * Establece el movimiento y ubicación de los demás personajes con respecto
+	 * al del cliente. <br>
+	 * 
+	 * @param paqueteDeMovimiento
+	 *            Movimiento y ubicación de los demás personajes. <br>
+	 */
+	public void setPaqueteDeMovimiento(final PaqueteDeMovimientos paqueteDeMovimiento) {
 		this.paqueteDeMovimiento = paqueteDeMovimiento;
 	}
 
+	/**
+	 * Devuelve información con respecto a los otros personajes. <br>
+	 * 
+	 * @return Otros personajes. <br>
+	 */
 	public PaqueteDePersonajes getPaqueteDePersonajes() {
 		return paqueteDePersonajes;
 	}
 
-	public void setPaqueteDePersonajes(PaqueteDePersonajes paqueteDePersonajes) {
+	/**
+	 * Establece información sobre los otros personajes. <br>
+	 * 
+	 * @param paqueteDePersonajes
+	 *            Otros personajes. <br>
+	 */
+	public void setPaqueteDePersonajes(final PaqueteDePersonajes paqueteDePersonajes) {
 		this.paqueteDePersonajes = paqueteDePersonajes;
 	}
 
-	public void setIdPersonaje(int idPersonaje) {
+	/**
+	 * Establece el ID del personaje. <br>
+	 * 
+	 * @param idPersonaje
+	 *            ID del personaje. <br>
+	 */
+	public void setIdPersonaje(final int idPersonaje) {
 		this.idPersonaje = idPersonaje;
 	}
 
-	public void setPaquetePersonaje(PaquetePersonaje paquetePersonaje) {
+	/**
+	 * Establece el personaje del cliente. <br>
+	 * 
+	 * @param paquetePersonaje
+	 *            Personaje. <br>
+	 */
+	public void setPaquetePersonaje(final PaquetePersonaje paquetePersonaje) {
 		this.paquetePersonaje = paquetePersonaje;
 	}
 
+	/**
+	 * Devuelve el usuario del cliente. <br>
+	 * 
+	 * @return Usuario del cliente. <br>
+	 */
 	public PaqueteUsuario getPaqueteUsuario() {
 		return paqueteUsuario;
 	}
 
-	public void setPaqueteUsuario(PaqueteUsuario paqueteUsuario) {
+	/**
+	 * Establece el usuario del cliente. <br>
+	 * 
+	 * @param paqueteUsuario
+	 *            Usuario. <br>
+	 */
+	public void setPaqueteUsuario(final PaqueteUsuario paqueteUsuario) {
 		this.paqueteUsuario = paqueteUsuario;
 	}
 }
-

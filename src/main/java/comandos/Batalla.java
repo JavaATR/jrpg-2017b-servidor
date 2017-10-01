@@ -7,17 +7,22 @@ import mensajeria.PaqueteBatalla;
 import servidor.EscuchaCliente;
 import servidor.Servidor;
 
+/**
+ * Clase que administra la batalla entre clientes. <br>
+ */
 public class Batalla extends ComandosServer {
-
+	/**
+	 * Ejecuta la batalla entre personajes.
+	 * <p>
+	 * <i>En caso de que no se pueda realizar la batalla, se avisa.</i> <br>
+	 */
 	@Override
 	public void ejecutar() {
 		// Le reenvio al id del personaje batallado que quieren pelear
 		escuchaCliente.setPaqueteBatalla((PaqueteBatalla) gson.fromJson(cadenaLeida, PaqueteBatalla.class));
-
 		Servidor.log.append(escuchaCliente.getPaqueteBatalla().getId() + " quiere batallar con "
 				+ escuchaCliente.getPaqueteBatalla().getIdEnemigo() + System.lineSeparator());
 		try {
-
 			// seteo estado de batalla
 			Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteBatalla().getId())
 					.setEstado(Estado.estadoBatalla);
@@ -25,7 +30,6 @@ public class Batalla extends ComandosServer {
 					.setEstado(Estado.estadoBatalla);
 			escuchaCliente.getPaqueteBatalla().setMiTurno(true);
 			escuchaCliente.getSalida().writeObject(gson.toJson(escuchaCliente.getPaqueteBatalla()));
-
 			for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
 				if (conectado.getIdPersonaje() == escuchaCliente.getPaqueteBatalla().getIdEnemigo()) {
 					int aux = escuchaCliente.getPaqueteBatalla().getId();
@@ -37,13 +41,10 @@ public class Batalla extends ComandosServer {
 				}
 			}
 		} catch (IOException e) {
-			Servidor.log.append("Falló al intentar enviar Batalla \n");
+			Servidor.log.append("Falló al intentar enviar Batalla.\n");
 		}
-
 		synchronized (Servidor.atencionConexiones) {
 			Servidor.atencionConexiones.notify();
 		}
-
 	}
-
 }
