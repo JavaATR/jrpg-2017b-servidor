@@ -132,6 +132,7 @@ public class Conector {
 			stRegistrarPersonaje.setInt(11, 0);
 			stRegistrarPersonaje.setInt(12, 1);
 			stRegistrarPersonaje.setInt(13, -1);
+			stRegistrarPersonaje.setInt(14, 0);
 			stRegistrarPersonaje.execute();
 
 			// Recupero la última key generada
@@ -269,7 +270,7 @@ public class Conector {
 			int i = 2;
 			int j = 1;
 			PreparedStatement stActualizarPersonaje = connect.prepareStatement(
-					"UPDATE personaje SET fuerza=?, destreza=?, inteligencia=?, saludTope=?, energiaTope=?, experiencia=?, nivel=? "
+					"UPDATE personaje SET fuerza=?, destreza=?, inteligencia=?, saludTope=?, energiaTope=?, experiencia=?, nivel=?, puntosAsignar=? "
 							+ "  WHERE idPersonaje=?");
 
 			stActualizarPersonaje.setInt(1, paquetePersonaje.getFuerza());
@@ -280,6 +281,7 @@ public class Conector {
 			stActualizarPersonaje.setInt(6, paquetePersonaje.getExperiencia());
 			stActualizarPersonaje.setInt(7, paquetePersonaje.getNivel());
 			stActualizarPersonaje.setInt(8, paquetePersonaje.getId());
+			stActualizarPersonaje.setInt(9, paquetePersonaje.getPuntosAsignar());
 			stActualizarPersonaje.executeUpdate();
 
 			PreparedStatement stDameItemsID = connect.prepareStatement("SELECT * FROM mochila WHERE idMochila = ?");
@@ -311,7 +313,6 @@ public class Conector {
 			Servidor.log.append("Fallo al intentar actualizar el personaje " + paquetePersonaje.getNombre()
 					+ System.lineSeparator());
 		}
-
 	}
 
 	/**
@@ -367,6 +368,7 @@ public class Conector {
 			personaje.setNombre(result.getString("nombre"));
 			personaje.setExperiencia(result.getInt("experiencia"));
 			personaje.setNivel(result.getInt("nivel"));
+			personaje.setPuntosAsignar(result.getInt("puntosAsignar"));
 
 			while (j <= 9) {
 				if (resultadoItemsID.getInt(i) != -1) {
@@ -503,7 +505,7 @@ public class Conector {
 	public void actualizarPersonajeSubioNivel(final PaquetePersonaje paquetePersonaje) {
 		try {
 			PreparedStatement stActualizarPersonaje = connect.prepareStatement(
-					"UPDATE personaje SET fuerza=?, destreza=?, inteligencia=?, saludTope=?, energiaTope=?, experiencia=?, nivel=? "
+					"UPDATE personaje SET fuerza=?, destreza=?, inteligencia=?, saludTope=?, energiaTope=?, experiencia=?, nivel=?, puntosAsignar=? "
 							+ "  WHERE idPersonaje=?");
 			stActualizarPersonaje.setInt(1, paquetePersonaje.getFuerza());
 			stActualizarPersonaje.setInt(2, paquetePersonaje.getDestreza());
@@ -513,6 +515,7 @@ public class Conector {
 			stActualizarPersonaje.setInt(6, paquetePersonaje.getExperiencia());
 			stActualizarPersonaje.setInt(7, paquetePersonaje.getNivel());
 			stActualizarPersonaje.setInt(8, paquetePersonaje.getId());
+			stActualizarPersonaje.setInt(9, paquetePersonaje.getPuntosAsignar());
 			stActualizarPersonaje.executeUpdate();
 			Servidor.log.append("El personaje " + paquetePersonaje.getNombre() + " se ha actualizado con éxito."
 					+ System.lineSeparator());
