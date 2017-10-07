@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -43,13 +44,13 @@ public class Servidor extends Thread {
 	 */
 	private static Map<Integer, PaquetePersonaje> personajesConectados = new HashMap<>();
 	/**
-	 * Ubicación de los enemigos. <br>
-	 */
-	private static Map<Integer, PaqueteMovimiento> ubicacionEnemigos = new HashMap<>();
-	/**
 	 * Enemigos conectados. <br>
 	 */
 	private static Map<Integer, PaqueteEnemigo> enemigosConectados = new HashMap<>();
+	/**
+	 * Ubicación de los enemigos. <br>
+	 */
+	private static Map<Integer, PaqueteMovimiento> ubicacionEnemigos = new HashMap<>();
 	/**
 	 * Hilo principal del servidor. <br>
 	 */
@@ -90,6 +91,10 @@ public class Servidor extends Thread {
 	 * Escucha de conexiones general. <br>
 	 */
 	public static AtencionConexiones atencionConexiones;
+	/**
+	 * Escucha de conexiones general. <br>
+	 */
+	public static AtencionEnemigos atencionEnemigos;
 	/**
 	 * Escucha de movimientos general. <br>
 	 */
@@ -153,6 +158,7 @@ public class Servidor extends Thread {
 				try {
 					server.stop();
 					atencionConexiones.stop();
+					atencionEnemigos.stop();
 					atencionMovimientos.stop();
 					for (EscuchaCliente cliente : clientesConectados) {
 						cliente.getSalida().close();
@@ -180,6 +186,7 @@ public class Servidor extends Thread {
 					try {
 						server.stop();
 						atencionConexiones.stop();
+						atencionEnemigos.stop();
 						atencionMovimientos.stop();
 						for (EscuchaCliente cliente : clientesConectados) {
 							cliente.getSalida().close();
@@ -216,10 +223,14 @@ public class Servidor extends Thread {
 			String ipRemota;
 
 			atencionConexiones = new AtencionConexiones();
+			atencionEnemigos = new AtencionEnemigos();
 			atencionMovimientos = new AtencionMovimientos();
 
 			atencionConexiones.start();
+			atencionEnemigos.start();
 			atencionMovimientos.start();
+			
+			generarEnemigos();
 
 			while (true) {
 				Socket cliente = serverSocket.accept();
@@ -350,5 +361,30 @@ public class Servidor extends Thread {
 	 */
 	public static Conector getConector() {
 		return conexionDB;
+	}
+	
+
+	
+	public void generarEnemigos() {
+		generateBryans();
+	}
+	
+	private void generateBryans() {
+		Random randomGenerator = new Random(); // Random generator para las posiciones
+		Integer i = 0;
+		PaqueteEnemigo bryans[] = new PaqueteEnemigo[10]; // Creo array de 10 Bryans y otro para sus posiciones
+		PaqueteMovimiento posicionesBryans[] = new PaqueteMovimiento[10];
+		enemigosConectados = new HashMap<Integer, PaqueteEnemigo>();
+		ubicacionEnemigos = new HashMap<Integer, PaqueteMovimiento>();
+		
+		for(i=0; i<bryans.length; i++) {
+			bryans[i] = new PaqueteEnemigo();
+			posicionesBryans[i] = new PaqueteMovimiento(0, 100 + (i * 40), 150 + (i * 20)); // TODO: Generacion de posiciones
+			enemigosConectados.put(i, bryans[i]); // Paso los arrays a hashmaps
+			ubicacionEnemigos.put(i, posicionesBryans[i]);
+		}
+		
+//		setEnemigosConectados(enemigosConectados); // Inserto los Bryans al juego usando los hashmaps
+//		setUbicacionEnemigos(ubicacionEnemigos);
 	}
 }

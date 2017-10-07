@@ -12,8 +12,10 @@ import mensajeria.Comando;
 import mensajeria.Paquete;
 import mensajeria.PaqueteAtacar;
 import mensajeria.PaqueteBatalla;
+import mensajeria.PaqueteDeEnemigos;
 import mensajeria.PaqueteDeMovimientos;
 import mensajeria.PaqueteDePersonajes;
+import mensajeria.PaqueteEnemigo;
 import mensajeria.PaqueteFinalizarBatalla;
 import mensajeria.PaqueteMovimiento;
 import mensajeria.PaquetePersonaje;
@@ -40,6 +42,10 @@ public class EscuchaCliente extends Thread {
 	 */
 	private int idPersonaje;
 	/**
+	 * ID del enemigo. <br>
+	 */
+	private int idEnemigo;
+	/**
 	 * Gson. <br>
 	 */
 	private final Gson gson = new Gson();
@@ -47,6 +53,10 @@ public class EscuchaCliente extends Thread {
 	 * Paquete de personaje del cliente. <br>
 	 */
 	private PaquetePersonaje paquetePersonaje;
+	/**
+	 * Paquete de enemigo del cliente. <br>
+	 */
+	private PaqueteEnemigo paqueteEnemigo;
 	/**
 	 * Paquete de movimiento del cliente. <br>
 	 */
@@ -75,6 +85,10 @@ public class EscuchaCliente extends Thread {
 	 * Paquete de personajes del cliente. <br>
 	 */
 	private PaqueteDePersonajes paqueteDePersonajes;
+	/**
+	 * Paquete de enemigos del cliente. <br>
+	 */
+	private PaqueteDeEnemigos paqueteDeEnemigos;
 
 	/**
 	 * Crea un escucha del cliente. <br>
@@ -112,12 +126,15 @@ public class EscuchaCliente extends Thread {
 			String cadenaLeida = (String) entrada.readObject();
 
 			while (!((paquete = gson.fromJson(cadenaLeida, Paquete.class)).getComando() == Comando.DESCONECTAR)) {
+				System.out.println(cadenaLeida);
+				
 				comand = (ComandosServer) paquete.getObjeto(Comando.NOMBREPAQUETE);
 				comand.setCadena(cadenaLeida);
 				comand.setEscuchaCliente(this);
 				comand.ejecutar();
 				cadenaLeida = (String) entrada.readObject();
 			}
+			
 			entrada.close();
 			salida.close();
 			socket.close();
@@ -174,6 +191,15 @@ public class EscuchaCliente extends Thread {
 	public PaquetePersonaje getPaquetePersonaje() {
 		return paquetePersonaje;
 	}
+	
+	/**
+	 * Obtiene el enemigo del cliente. <br>
+	 * 
+	 * @return Enemigo del cliente. <br>
+	 */
+	public PaqueteEnemigo getPaqueteEnemigo() {
+		return paqueteEnemigo;
+	}
 
 	/**
 	 * Devuelve el ID del personaje del cliente. <br>
@@ -182,6 +208,15 @@ public class EscuchaCliente extends Thread {
 	 */
 	public int getIdPersonaje() {
 		return idPersonaje;
+	}
+	
+	/**
+	 * Devuelve el ID del enemigo del cliente. <br>
+	 * 
+	 * @return ID del enemigo. <br>
+	 */
+	public int getIdEnemigo() {
+		return idEnemigo;
 	}
 
 	/**
@@ -318,6 +353,30 @@ public class EscuchaCliente extends Thread {
 	 */
 	public void setPaquetePersonaje(final PaquetePersonaje paquetePersonaje) {
 		this.paquetePersonaje = paquetePersonaje;
+	}
+	
+	/**
+	 * Establece el enemigo del cliente. <br>
+	 * 
+	 * @param paqueteEnemigo
+	 *            Enemigo. <br>
+	 */
+	public void setPaqueteEnemigo(final PaqueteEnemigo paqueteEnemigo) {
+		this.paqueteEnemigo = paqueteEnemigo;
+	}
+	
+	/**
+	 * Devuelve información con respecto a los enemigos. <br>
+	 */
+	public PaqueteDeEnemigos getPaqueteDeEnemigos() {
+		return paqueteDeEnemigos;
+	}
+
+	/**
+	 * Establece información sobre los enemigos. <br>
+	 */
+	public void setPaqueteDeEnemigos(final PaqueteDeEnemigos paqueteDeEnemigos) {
+		this.paqueteDeEnemigos = paqueteDeEnemigos;
 	}
 
 	/**
