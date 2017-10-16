@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 
 import estados.Estado;
 import mensajeria.Comando;
+import mensajeria.PaqueteDeEnemigos;
 import mensajeria.PaqueteDePersonajes;
+import mensajeria.PaqueteDeUbicacionEnemigos;
 
 /**
  * Clase que esta atenta a la conexión de los clientes. <br>
@@ -42,8 +44,19 @@ public class AtencionConexiones extends Thread {
 							PaqueteDePersonajes pdp = (PaqueteDePersonajes) new PaqueteDePersonajes(
 									Servidor.getPersonajesConectados()).clone();
 							pdp.setComando(Comando.CONEXION);
+							
+							PaqueteDeEnemigos pde = (PaqueteDeEnemigos) new PaqueteDeEnemigos(
+									Servidor.getEnemigosConectados()).clone();
+							pde.setComando(Comando.CONEXIONENEMIGOS);
+							
+							PaqueteDeUbicacionEnemigos pdue = (PaqueteDeUbicacionEnemigos) new PaqueteDeUbicacionEnemigos(
+									Servidor.getUbicacionEnemigos()).clone();
+							pdue.setComando(Comando.UBICACIONENEMIGOS);
+							
 							synchronized (conectado) {
 								conectado.getSalida().writeObject(gson.toJson(pdp));
+								conectado.getSalida().writeObject(gson.toJson(pde));
+								conectado.getSalida().writeObject(gson.toJson(pdue));
 							}
 						}
 					}

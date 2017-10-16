@@ -13,10 +13,9 @@ public class ActualizarEnemigos extends ComandosServer {
 	 * Ejecuta la conexión entre los clientes, los mantiene actualizados. <br>
 	 */
 	@Override
-	public void ejecutar() {		
-		escuchaCliente.setPaqueteDeEnemigos((PaqueteDeEnemigos) (gson.fromJson(cadenaLeida, PaqueteDeEnemigos.class)).clone());
-		synchronized (Servidor.atencionEnemigos) {
-			Servidor.atencionEnemigos.notify();
+	public void ejecutar() {
+		synchronized (Servidor.atencionConexiones) {
+			Servidor.atencionConexiones.notify();
 		}
 	}
 }

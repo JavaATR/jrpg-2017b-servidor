@@ -18,12 +18,32 @@ public class Batalla extends ComandosServer {
 	 */
 	@Override
 	public void ejecutar() {
-		// Le reenvio al id del personaje batallado que quieren pelear
+		// Le reenvio el id del personaje batallado que quieren pelear
 		escuchaCliente.setPaqueteBatalla((PaqueteBatalla) gson.fromJson(cadenaLeida, PaqueteBatalla.class));
 		Servidor.log.append(escuchaCliente.getPaqueteBatalla().getId() + " quiere batallar con "
 				+ escuchaCliente.getPaqueteBatalla().getIdEnemigo() + System.lineSeparator());
-		try {
-			// seteo estado de batalla
+		
+		// Me fijo si el usuario va a batallar contra un NPC
+		if (escuchaCliente.getPaqueteBatalla().getIdEnemigo() < 0) {
+			try {
+				// Seteo estado de batalla
+				Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteBatalla().getId())
+						.setEstado(Estado.estadoBatalla);
+				escuchaCliente.getPaqueteBatalla().setMiTurno(true);
+				escuchaCliente.getSalida().writeObject(gson.toJson(escuchaCliente.getPaqueteBatalla()));
+			} catch (IOException e) {
+				Servidor.log.append("Falló al intentar enviar Batalla.\n");
+			}
+			synchronized (Servidor.atencionConexiones) {
+				Servidor.atencionConexiones.notify();
+			}
+		}
+		
+		// Si no es NPC, es otro usuario
+		else {
+			try {
+		
+			// Seteo estado de batalla
 			Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteBatalla().getId())
 					.setEstado(Estado.estadoBatalla);
 			Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteBatalla().getIdEnemigo())
@@ -37,14 +57,16 @@ public class Batalla extends ComandosServer {
 					escuchaCliente.getPaqueteBatalla().setIdEnemigo(aux);
 					escuchaCliente.getPaqueteBatalla().setMiTurno(false);
 					conectado.getSalida().writeObject(gson.toJson(escuchaCliente.getPaqueteBatalla()));
+					
 					break;
 				}
 			}
-		} catch (IOException e) {
-			Servidor.log.append("Falló al intentar enviar Batalla.\n");
-		}
-		synchronized (Servidor.atencionConexiones) {
-			Servidor.atencionConexiones.notify();
+			} catch (IOException e) {
+				Servidor.log.append("Falló al intentar enviar Batalla.\n");
+			}
+			synchronized (Servidor.atencionConexiones) {
+				Servidor.atencionConexiones.notify();
+			}
 		}
 	}
 }
