@@ -22,22 +22,29 @@ public class Talk extends ComandosServer {
 	public void ejecutar() {
 		int idUser = 0;
 		int contador = 0;
-		PaqueteMensaje paqueteMensaje = (PaqueteMensaje) (gson.fromJson(cadenaLeida, PaqueteMensaje.class));
+		PaqueteMensaje paqueteMensaje = (PaqueteMensaje) (gson
+				.fromJson(cadenaLeida, PaqueteMensaje.class));
 		if (!(paqueteMensaje.getUserReceptor() == null)) {
 			if (Servidor.mensajeAUsuario(paqueteMensaje)) {
 				paqueteMensaje.setComando(Comando.TALK);
-				for (Map.Entry<Integer, PaquetePersonaje> personaje : Servidor.getPersonajesConectados().entrySet()) {
-					if (personaje.getValue().getNombre().equals(paqueteMensaje.getUserReceptor())) {
+				for (Map.Entry<Integer, PaquetePersonaje> personaje : Servidor
+						.getPersonajesConectados().entrySet()) {
+					if (personaje.getValue().getNombre()
+							.equals(paqueteMensaje.getUserReceptor())) {
 						idUser = personaje.getValue().getId();
 					}
 				}
-				for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
+				for (EscuchaCliente conectado : Servidor
+						.getClientesConectados()) {
 					if (conectado.getIdPersonaje() == idUser) {
 						try {
-							conectado.getSalida().writeObject(gson.toJson(paqueteMensaje));
+							conectado.getSalida().writeObject(gson
+									.toJson(paqueteMensaje));
 						} catch (IOException e) {
-							Servidor.log.append("Falló al intentar enviar mensaje a:"
-									+ conectado.getPaquetePersonaje().getId() + ".\n");
+							Servidor.log.append(
+									"Falló al intentar enviar mensaje a:"
+									+ conectado.getPaquetePersonaje()
+									.getId() + ".\n");
 						}
 					}
 				}
@@ -45,18 +52,23 @@ public class Talk extends ComandosServer {
 				Servidor.log.append("No se envió el mensaje.\n");
 			}
 		} else {
-			for (Map.Entry<Integer, PaquetePersonaje> personaje : Servidor.getPersonajesConectados().entrySet()) {
-				if (personaje.getValue().getNombre().equals(paqueteMensaje.getUserEmisor())) {
+			for (Map.Entry<Integer, PaquetePersonaje> personaje : Servidor
+					.getPersonajesConectados().entrySet()) {
+				if (personaje.getValue().getNombre().equals(paqueteMensaje
+						.getUserEmisor())) {
 					idUser = personaje.getValue().getId();
 				}
 			}
-			for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
+			for (EscuchaCliente conectado : Servidor.getClientesConectados()){
 				if (conectado.getIdPersonaje() != idUser) {
 					try {
-						conectado.getSalida().writeObject(gson.toJson(paqueteMensaje));
+						conectado.getSalida().writeObject(gson
+								.toJson(paqueteMensaje));
 					} catch (IOException e) {
-						Servidor.log.append("Falló al intentar enviar mensaje a:"
-								+ conectado.getPaquetePersonaje().getId() + ".\n");
+						Servidor.log.append(
+								"Falló al intentar enviar mensaje a:"
+								+ conectado.getPaquetePersonaje()
+								.getId() + ".\n");
 					}
 				}
 			}
