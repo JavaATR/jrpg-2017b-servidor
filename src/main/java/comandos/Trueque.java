@@ -33,8 +33,9 @@ public class Trueque extends ComandosServer {
 					+ conectado.getPaquetePersonaje().getId() + "\n");
 				}
 			} else {
-				if (conectado.getPaquetePersonaje().getId() == 
-						paqueteComerciar.getId()) {
+				if (
+						conectado.getPaquetePersonaje()
+						.getId() == paqueteComerciar.getId()) {
 					try {
 						conectado.getSalida()
 						.writeObject(gson.toJson(paqueteComerciar));
