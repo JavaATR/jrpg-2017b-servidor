@@ -27,19 +27,22 @@ public class FinalizarBatalla extends ComandosServer {
 		Servidor.getPersonajesConectados().get(escuchaCliente
 				.getPaqueteFinalizarBatalla().getId())
 				.setEstado(Estado.estadoJuego);
-		Servidor.getPersonajesConectados().get(escuchaCliente
-				.getPaqueteFinalizarBatalla().getIdEnemigo())
+		if (escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo() < 0)
+			Servidor.getEnemigosConectados().get(escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo() * -1 + 1)
+			.setEstado(Estado.estadoJuego);
+		else
+		{
+			Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo())
 				.setEstado(Estado.estadoJuego);
-		for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
-			if (conectado.getIdPersonaje() == escuchaCliente
-					.getPaqueteFinalizarBatalla().getIdEnemigo()) {
-				try {
-					conectado.getSalida().writeObject(gson.toJson(
-							escuchaCliente.getPaqueteFinalizarBatalla()));
-				} catch (IOException e) {
-					Servidor.log.append(
-							"Falló al intentar enviar finalizarBatalla a:"
-							+ conectado.getPaquetePersonaje().getId() + "\n");
+			for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
+				if (conectado.getIdPersonaje() == escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo()) {
+					try {
+						conectado.getSalida().writeObject(gson.toJson(escuchaCliente.getPaqueteFinalizarBatalla()));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Servidor.log.append("Falló al intentar enviar finalizarBatalla a:"
+								+ conectado.getPaquetePersonaje().getId() + "\n");
+					}
 				}
 			}
 		}
