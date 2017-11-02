@@ -34,7 +34,7 @@ public class Conector {
 	 * <i>En caso de error indica que falló al intentar establecer una conexión
 	 * con la base de datos. </i><br>
 	 */
-	public void connect() {
+	public final void connect() {
 		try {
 			Servidor.log.append("Estableciendo conexión con la base de datos..." + System.lineSeparator());
 			connect = DriverManager.getConnection("jdbc:sqlite:" + url);
@@ -51,7 +51,7 @@ public class Conector {
 	 * <i>En caso de error indica un error al cerrar la conexión con la base de
 	 * datos.</i> <br>
 	 */
-	public void close() {
+	public final void close() {
 		try {
 			connect.close();
 		} catch (SQLException ex) {
@@ -71,7 +71,7 @@ public class Conector {
 	 * @return <b>true</b> si se registra al usuario.<br>
 	 *         <b>false</b> si no se lo registró. <br>
 	 */
-	public boolean registrarUsuario(final PaqueteUsuario user) {
+	public final boolean registrarUsuario(final PaqueteUsuario user) {
 		ResultSet result = null;
 		try {
 			PreparedStatement st1 = connect.prepareStatement("SELECT * FROM registro WHERE usuario= ? ");
@@ -111,7 +111,7 @@ public class Conector {
 	 * @return <b>true</b> si se registra al personaje.<br>
 	 *         <b>false</b> si no se lo registró. <br>
 	 */
-	public boolean registrarPersonaje(final PaquetePersonaje paquetePersonaje, final PaqueteUsuario paqueteUsuario) {
+	public final boolean registrarPersonaje(final PaquetePersonaje paquetePersonaje, final PaqueteUsuario paqueteUsuario) {
 		try {
 			// Registro al personaje en la base de datos
 			PreparedStatement stRegistrarPersonaje = connect.prepareStatement(
@@ -169,13 +169,13 @@ public class Conector {
 	/**
 	 * Registra el inventario de un personaje.
 	 * <p>
-	 * <i>En caso de que no se le pueda crear el inventario se avisa. <br>
+	 * <i>En caso de que no se le pueda crear el inventario se avisa.</i> <br>
 	 * @param idInventarioMochila
 	 *            ID del inventario del personaje. <br>
 	 * @return <b>true</b> si se registra el inventario.<br>
 	 *         <b>false</b> si no se lo registra. <br>
 	 */
-	public boolean registrarInventarioMochila(final int idInventarioMochila) {
+	public final boolean registrarInventarioMochila(final int idInventarioMochila) {
 		try {
 			// Preparo la consulta para el registro el inventario en la base de
 			// datos
@@ -216,7 +216,7 @@ public class Conector {
 	 * @return <b>true</b> si se logueó al usuario.<br>
 	 *         <b>false</b> si no se lo logueó. <br>
 	 */
-	final public boolean loguearUsuario(final PaqueteUsuario user) {
+	public final boolean loguearUsuario(final PaqueteUsuario user) {
 		ResultSet result = null;
 		try {
 			// Busco usuario y contraseña
@@ -245,11 +245,11 @@ public class Conector {
 	/**
 	 * Actualiza el personaje al dejar la partida.
 	 * <p>
-	 * <i>En caso de que no se pueda actualizar al personaje, se avisa. <br>
+	 * <i>En caso de que no se pueda actualizar al personaje, se avisa.</i> <br>
 	 * @param paquetePersonaje
 	 *            Personaje a guardar sus estados. <br>
 	 */
-	public void actualizarPersonaje(final PaquetePersonaje paquetePersonaje) {
+	public final void actualizarPersonaje(final PaquetePersonaje paquetePersonaje) {
 		try {
 			int i = 2;
 			int j = 1;
@@ -288,7 +288,6 @@ public class Conector {
 			}
 			Servidor.log.append("El personaje " + paquetePersonaje.getNombre() + " se ha actualizado con éxito."
 					+ System.lineSeparator());
-			;
 		} catch (SQLException e) {
 			Servidor.log.append("Fallo al intentar actualizar el personaje " + paquetePersonaje.getNombre()
 					+ System.lineSeparator());
@@ -307,7 +306,7 @@ public class Conector {
 	 *             En caso de no poder crear el paquete de personaje tira error.
 	 *             <br>
 	 */
-	public PaquetePersonaje getPersonaje(final PaqueteUsuario user) throws IOException {
+	public final PaquetePersonaje getPersonaje(final PaqueteUsuario user) throws IOException {
 		ResultSet result = null;
 		ResultSet resultadoItemsID = null;
 		ResultSet resultadoDatoItem = null;
@@ -377,7 +376,7 @@ public class Conector {
 	 *            Usuario. <br>
 	 * @return Usuario. <br>
 	 */
-	public PaqueteUsuario getUsuario(final String usuario) {
+	public final PaqueteUsuario getUsuario(final String usuario) {
 		ResultSet result = null;
 		PreparedStatement st;
 		try {
@@ -403,7 +402,7 @@ public class Conector {
 	 * @param paquetePersonaje
 	 *            Personaje del cliente. <br>
 	 */
-	public void actualizarInventario(final PaquetePersonaje paquetePersonaje) {
+	public final void actualizarInventario(final PaquetePersonaje paquetePersonaje) {
 		int i = 0;
 		PreparedStatement stActualizarMochila;
 		try {
@@ -431,7 +430,7 @@ public class Conector {
 	 * @param idPersonaje
 	 *            ID del personaje. <br>
 	 */
-	public void actualizarInventario(final int idPersonaje) {
+	public final void actualizarInventario(final int idPersonaje) {
 		int i = 0;
 		PaquetePersonaje paquetePersonaje = Servidor.getPersonajesConectados().get(idPersonaje);
 		PreparedStatement stActualizarMochila;
@@ -469,7 +468,7 @@ public class Conector {
 	 * @param paquetePersonaje
 	 *            Personaje del cliente. <br>
 	 */
-	public void actualizarPersonajeSubioNivel(final PaquetePersonaje paquetePersonaje) {
+	public final void actualizarPersonajeSubioNivel(final PaquetePersonaje paquetePersonaje) {
 		try {
 			PreparedStatement stActualizarPersonaje = connect.prepareStatement(
 					"UPDATE personaje SET fuerza=?, destreza=?, inteligencia=?, saludTope=?, energiaTope=?, experiencia=?, nivel=?, puntosAsignar=? "

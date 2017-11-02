@@ -170,11 +170,10 @@ public class Servidor extends Thread {
 
 	/**
 	 * Carga la interfaz visual del servidor. <br>
-	 * 
 	 * @param args
 	 *            argumentos. <br>
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		cargarInterfaz();
 	}
 
@@ -276,7 +275,7 @@ public class Servidor extends Thread {
 	/**
 	 * Ejecuta el servidor. <br>
 	 */
-	public void run() {
+	public final void run() {
 		try {
 			conexionDB = new Conector();
 			conexionDB.connect();
@@ -308,14 +307,13 @@ public class Servidor extends Thread {
 
 	/**
 	 * Envía un mensaje a un cliente. <br>
-	 * 
 	 * @param pqm
 	 *            Paquete de mensaje del cliente al que se le envía el mensaje.
 	 *            <br>
 	 * @return <b>true</b> si se lo logró envíar.<br>
 	 *         <b>false</b> si se encuentra desconectado. <br>
 	 */
-	public static boolean mensajeAUsuario(PaqueteMensaje pqm) {
+	public static boolean mensajeAUsuario(final PaqueteMensaje pqm) {
 		boolean result = true;
 		boolean noEncontro = true;
 		for (Map.Entry<Integer, PaquetePersonaje> personaje : personajesConectados.entrySet()) {
@@ -341,14 +339,13 @@ public class Servidor extends Thread {
 
 	/**
 	 * Envía un mensaje a todos los usuarios. <br>
-	 * 
 	 * @param contador
 	 *            Contador de personajes conectados. <br>
 	 * @return <b>true</b> si se le envío el mensaje a todos los usuarios.<br>
 	 *         <b>false</b> si se lo envío a casi todos o a los que se pudo.
 	 *         <br>
 	 */
-	public static boolean mensajeAAll(int contador) {
+	public static boolean mensajeAAll(final int contador) {
 		boolean result = true;
 		if (personajesConectados.size() != contador + 1) {
 			result = false;
@@ -368,7 +365,6 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista con los clientes conectados. <br>
-	 * 
 	 * @return Clientes conectados. <br>
 	 */
 	public static ArrayList<EscuchaCliente> getClientesConectados() {
@@ -377,7 +373,6 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista con la ubicación de los personajes. <br>
-	 * 
 	 * @return Ubicación de los personajes. <br>
 	 */
 	public static Map<Integer, PaqueteMovimiento> getUbicacionPersonajes() {
@@ -386,7 +381,6 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista con los personajes conectados. <br>
-	 * 
 	 * @return Personajes conectados. <br>
 	 */
 	public static Map<Integer, PaquetePersonaje> getPersonajesConectados() {
@@ -395,7 +389,6 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista con la ubicación de los enemigos. <br>
-	 * 
 	 * @return Ubicación de los enemigos. <br>
 	 */
 	public static Map<Integer, PaqueteMovimiento> getUbicacionEnemigos() {
@@ -404,7 +397,6 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista de los enemigos conectados. <br>
-	 * 
 	 * @return Enemigos conectados. <br>
 	 */
 	public static Map<Integer, PaqueteEnemigo> getEnemigosConectados() {
@@ -413,7 +405,6 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve el conector a la base de datos. <br>
-	 * 
 	 * @return Conector a la base de datos. <br>
 	 */
 	public static Conector getConector() {
@@ -423,7 +414,7 @@ public class Servidor extends Thread {
 	/**
 	 * Genera los npc. <br>
 	 */
-	public void generarEnemigos() {
+	public final void generarEnemigos() {
 		generateBryans();
 	}
 

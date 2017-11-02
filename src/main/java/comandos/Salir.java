@@ -13,7 +13,7 @@ public class Salir extends ComandosServer {
 	 * Ejecuta la salida del cliente del servidor. <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		// Cierro todo
 		try {
 			escuchaCliente.getEntrada().close();
@@ -26,7 +26,7 @@ public class Salir extends ComandosServer {
 		Servidor.getClientesConectados().remove(this);
 		Paquete paquete = (Paquete) gson.fromJson(cadenaLeida, Paquete.class);
 		// Indico que se desconecto
-		Servidor.log.append(paquete.getIp() + " se ha desconectado." 
+		Servidor.log.append(paquete.getIp() + " se ha desconectado."
 				+ System.lineSeparator());
 	}
 }

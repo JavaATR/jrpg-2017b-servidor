@@ -16,7 +16,7 @@ public class Trueque extends ComandosServer {
 	 * <i>En caso de que no se pueda realizar el trueque, se avisa.</i> <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		PaqueteComerciar paqueteComerciar;
 		paqueteComerciar = (PaqueteComerciar) gson
 				.fromJson(cadenaLeida, PaqueteComerciar.class);
@@ -29,7 +29,7 @@ public class Trueque extends ComandosServer {
 							.toJson(paqueteComerciar));
 				} catch (IOException e) {
 					Servidor.log.append(
-							"Falló al intentar enviar trueque a:" 
+							"Falló al intentar enviar trueque a:"
 					+ conectado.getPaquetePersonaje().getId() + "\n");
 				}
 			} else {
@@ -41,7 +41,7 @@ public class Trueque extends ComandosServer {
 						.writeObject(gson.toJson(paqueteComerciar));
 					} catch (IOException e) {
 						Servidor.log.append(
-								"Falló al intentar enviar trueque a:" 
+								"Falló al intentar enviar trueque a:"
 						+ conectado.getPaquetePersonaje().getId() + "\n");
 					}
 				}

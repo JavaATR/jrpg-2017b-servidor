@@ -12,7 +12,7 @@ public class Conexion extends ComandosServer {
 	 * Ejecuta la conexión entre los clientes, los mantiene actualizados. <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		escuchaCliente.setPaquetePersonaje((PaquetePersonaje) (gson.fromJson(
 				cadenaLeida, PaquetePersonaje.class)).clone());
 		Servidor.getPersonajesConectados().put(

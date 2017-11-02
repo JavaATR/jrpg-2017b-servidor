@@ -31,7 +31,7 @@ public class AtencionMovimientos extends Thread {
 	/**
 	 * Corre el escucha de movimientos general. <br>
 	 */
-	public void run() {
+	public final void run() {
 		synchronized (this) {
 			try {
 				while (true) {

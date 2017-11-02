@@ -18,7 +18,7 @@ public class InicioSesion extends ComandosServer {
 	 * <i>En caso de que no se pueda iniciar sesión, se avisa.</i> <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		Paquete paqueteSv = new Paquete(null, 0);
 		paqueteSv.setComando(Comando.INICIOSESION);
 		// Recibo el paquete usuario

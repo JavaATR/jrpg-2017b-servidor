@@ -16,14 +16,13 @@ public class Comercio extends ComandosServer {
 	 * <i>En caso de que no se pueda realizar el comercio, se avisa.</i> <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		PaqueteComerciar paqueteComerciar;
 		paqueteComerciar = (PaqueteComerciar) gson.fromJson(
 				cadenaLeida, PaqueteComerciar.class);
 		// BUSCO EN LAS ESCUCHAS AL QUE SE LO TENGO QUE MANDAR
 		for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
-			if (conectado.getPaquetePersonaje().getId() == 
-					paqueteComerciar.getIdEnemigo()) {
+			if (conectado.getPaquetePersonaje().getId() == paqueteComerciar.getIdEnemigo()) {
 				try {
 					conectado.getSalida().writeObject(gson.toJson(
 							paqueteComerciar));

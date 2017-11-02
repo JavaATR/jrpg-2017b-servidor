@@ -12,9 +12,9 @@ public class Movimiento extends ComandosServer {
 	 * usuarios y su movimiento.<br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		escuchaCliente.setPaqueteMovimiento(
-				(PaqueteMovimiento) (gson.fromJson((String) cadenaLeida, 
+				(PaqueteMovimiento) (gson.fromJson((String) cadenaLeida,
 						PaqueteMovimiento.class)));
 		Servidor.getUbicacionPersonajes().get(escuchaCliente
 				.getPaqueteMovimiento().getIdPersonaje())

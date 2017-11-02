@@ -17,7 +17,7 @@ public class Registro extends ComandosServer {
 	 * <i>En caso de que no se pueda registrar, se avisa.</i> <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		Paquete paqueteSv = new Paquete(null, 0);
 		paqueteSv.setComando(Comando.REGISTRO);
 		escuchaCliente.setPaqueteUsuario((PaqueteUsuario) (gson

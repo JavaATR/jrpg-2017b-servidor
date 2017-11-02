@@ -19,7 +19,7 @@ public class Talk extends ComandosServer {
 	 * <i>En caso de que no se pueda envíar el mensaje, se avisa.</i> <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		int idUser = 0;
 		int contador = 0;
 		PaqueteMensaje paqueteMensaje = (PaqueteMensaje) (gson
@@ -59,7 +59,7 @@ public class Talk extends ComandosServer {
 					idUser = personaje.getValue().getId();
 				}
 			}
-			for (EscuchaCliente conectado : Servidor.getClientesConectados()){
+			for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
 				if (conectado.getIdPersonaje() != idUser) {
 					try {
 						conectado.getSalida().writeObject(gson

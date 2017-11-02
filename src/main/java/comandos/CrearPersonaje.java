@@ -15,7 +15,7 @@ public class CrearPersonaje extends ComandosServer {
 	 * <i>En caso de que no se pueda crear al personaje, se avisa.</i> <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		// Casteo el paquete personaje
 		escuchaCliente.setPaquetePersonaje((PaquetePersonaje) (
 				gson.fromJson(cadenaLeida, PaquetePersonaje.class)));
@@ -30,7 +30,7 @@ public class CrearPersonaje extends ComandosServer {
 					escuchaCliente.getPaqueteUsuario());
 			escuchaCliente.setIdPersonaje(paquetePersonaje.getId());
 			escuchaCliente.getSalida().writeObject(
-					gson.toJson(escuchaCliente.getPaquetePersonaje(), 
+					gson.toJson(escuchaCliente.getPaquetePersonaje(),
 							escuchaCliente.getPaquetePersonaje().getClass()));
 		} catch (IOException e1) {
 			Servidor.log.append(

@@ -17,25 +17,18 @@ public class ActualizarTrueque extends ComandosServer {
 	 * <br>
 	 */
 	@Override
-	public void ejecutar() {
-		escuchaCliente.setPaquetePersonaje((PaquetePersonaje) gson
-				.fromJson(cadenaLeida, PaquetePersonaje.class));
-		Servidor.getConector().actualizarInventario(escuchaCliente
-				.getPaquetePersonaje());
-		Servidor.getConector().actualizarPersonaje(escuchaCliente
-				.getPaquetePersonaje());
-		Servidor.getPersonajesConectados().remove(escuchaCliente
-				.getPaquetePersonaje().getId());
-		Servidor.getPersonajesConectados().put(escuchaCliente
-				.getPaquetePersonaje().getId(),
+	public final void ejecutar() {
+		escuchaCliente.setPaquetePersonaje((PaquetePersonaje) gson.fromJson(cadenaLeida, PaquetePersonaje.class));
+		Servidor.getConector().actualizarInventario(escuchaCliente.getPaquetePersonaje());
+		Servidor.getConector().actualizarPersonaje(escuchaCliente.getPaquetePersonaje());
+		Servidor.getPersonajesConectados().remove(escuchaCliente.getPaquetePersonaje().getId());
+		Servidor.getPersonajesConectados().put(escuchaCliente.getPaquetePersonaje().getId(),
 				escuchaCliente.getPaquetePersonaje());
 		for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
 			try {
-				conectado.getSalida().writeObject(gson
-						.toJson(escuchaCliente.getPaquetePersonaje()));
+				conectado.getSalida().writeObject(gson.toJson(escuchaCliente.getPaquetePersonaje()));
 			} catch (IOException e) {
-				Servidor.log.append(
-						"Falló al intentar enviar actualizacion de trueque a:"
+				Servidor.log.append("Falló al intentar enviar actualizacion de trueque a:"
 						+ conectado.getPaquetePersonaje().getId() + ".\n");
 			}
 		}

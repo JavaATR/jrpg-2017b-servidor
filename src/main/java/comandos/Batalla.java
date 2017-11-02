@@ -17,7 +17,7 @@ public class Batalla extends ComandosServer {
 	 * <i>En caso de que no se pueda realizar la batalla, se avisa.</i> <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		// Le reenvio el id del personaje batallado que quieren pelear
 		escuchaCliente.setPaqueteBatalla((PaqueteBatalla) gson.fromJson(cadenaLeida, PaqueteBatalla.class));
 		Servidor.log.append(escuchaCliente.getPaqueteBatalla().getId() + " quiere batallar con "
@@ -38,9 +38,7 @@ public class Batalla extends ComandosServer {
 			synchronized (Servidor.atencionConexiones) {
 				Servidor.atencionConexiones.notify();
 			}
-		}
-		// Si no es NPC, es otro usuario
-		else {
+		} else { // Si no es NPC, es otro usuario
 			try {
 				// Seteo estado de batalla
 				Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteBatalla().getId())
@@ -56,7 +54,6 @@ public class Batalla extends ComandosServer {
 						escuchaCliente.getPaqueteBatalla().setIdEnemigo(aux);
 						escuchaCliente.getPaqueteBatalla().setMiTurno(false);
 						conectado.getSalida().writeObject(gson.toJson(escuchaCliente.getPaqueteBatalla()));
-
 						break;
 					}
 				}
