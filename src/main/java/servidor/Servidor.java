@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -314,27 +315,21 @@ public class Servidor extends Thread {
 	 *         <b>false</b> si se encuentra desconectado. <br>
 	 */
 	public static boolean mensajeAUsuario(final PaqueteMensaje pqm) {
-		boolean result = true;
-		boolean noEncontro = true;
-		for (Map.Entry<Integer, PaquetePersonaje> personaje : personajesConectados.entrySet()) {
-			if (noEncontro && (!personaje.getValue().getNombre().equals(pqm.getUserReceptor()))) {
-				result = false;
-			} else {
-				result = true;
-				noEncontro = false;
-			}
+		Iterator<Map.Entry<Integer, PaquetePersonaje>> iterator = personajesConectados.entrySet().iterator();
+		Map.Entry<Integer, PaquetePersonaje> entry = iterator.next();
+		while (iterator.hasNext() && !entry.getValue().getNombre().equals(pqm.getUserReceptor())) {
+			entry = iterator.next();	
 		}
-		// Si existe inicio sesion
-		if (result) {
+		// Si existe inicio sesion 
+		if (entry.getValue().getNombre().equals(pqm.getUserReceptor())) {
 			Servidor.log
 					.append(pqm.getUserEmisor() + " envió mensaje a " + pqm.getUserReceptor() + System.lineSeparator());
 			return true;
-		} else {
-			// Si no existe informo y devuelvo false
-			Servidor.log.append("El mensaje para " + pqm.getUserReceptor()
-					+ " no se envió, ya que se encuentra desconectado." + System.lineSeparator());
-			return false;
 		}
+		// Si no existe informo y devuelvo false
+		Servidor.log.append("El mensaje para " + pqm.getUserReceptor()
+				+ " no se envió, ya que se encuentra desconectado." + System.lineSeparator());
+		return false;
 	}
 
 	/**
@@ -347,7 +342,7 @@ public class Servidor extends Thread {
 	 */
 	public static boolean mensajeAAll(final int contador) {
 		// Compruebo que estén todos conectados.
-		if (personajesConectados.size() != contador + 1) {
+		if (personajesConectados.size() == contador + 1) {
 			Servidor.log.append("Se ha enviado un mensaje a todos los usuarios" + System.lineSeparator());
 			return true;
 		}
