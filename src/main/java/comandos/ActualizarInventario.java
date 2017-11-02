@@ -17,7 +17,7 @@ public class ActualizarInventario extends ComandosServer {
 	 * <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		escuchaCliente.setPaquetePersonaje((PaquetePersonaje) gson.fromJson(cadenaLeida, PaquetePersonaje.class));
 		Servidor.getConector().actualizarInventario(escuchaCliente.getPaquetePersonaje());
 		Servidor.getPersonajesConectados().remove(escuchaCliente.getPaquetePersonaje().getId());

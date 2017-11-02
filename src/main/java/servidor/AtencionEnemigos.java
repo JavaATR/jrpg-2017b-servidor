@@ -2,7 +2,6 @@ package servidor;
 
 import com.google.gson.Gson;
 
-import estados.Estado;
 import mensajeria.Comando;
 import mensajeria.PaqueteDeEnemigos;
 import mensajeria.PaqueteDeUbicacionEnemigos;
@@ -31,7 +30,7 @@ public class AtencionEnemigos extends Thread {
 	/**
 	 * Ejecuta la escucha de nuevas conexiones. <br>
 	 */
-	public void run() {		
+	public final void run() {
 		synchronized (this) {
 			try {
 				while (true) {
@@ -40,7 +39,7 @@ public class AtencionEnemigos extends Thread {
 						PaqueteDeEnemigos pde = (PaqueteDeEnemigos) new PaqueteDeEnemigos(
 								Servidor.getEnemigosConectados()).clone();
 						pde.setComando(Comando.CONEXIONENEMIGOS);
-						
+
 						PaqueteDeUbicacionEnemigos pdue = (PaqueteDeUbicacionEnemigos) new PaqueteDeUbicacionEnemigos(
 								Servidor.getUbicacionEnemigos()).clone();
 						pdue.setComando(Comando.UBICACIONENEMIGOS);

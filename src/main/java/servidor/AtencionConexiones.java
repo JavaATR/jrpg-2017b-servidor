@@ -32,7 +32,7 @@ public class AtencionConexiones extends Thread {
 	/**
 	 * Ejecuta la escucha de nuevas conexiones. <br>
 	 */
-	public void run() {
+	public final void run() {
 		synchronized (this) {
 			try {
 				while (true) {
@@ -44,15 +44,12 @@ public class AtencionConexiones extends Thread {
 							PaqueteDePersonajes pdp = (PaqueteDePersonajes) new PaqueteDePersonajes(
 									Servidor.getPersonajesConectados()).clone();
 							pdp.setComando(Comando.CONEXION);
-							
 							PaqueteDeEnemigos pde = (PaqueteDeEnemigos) new PaqueteDeEnemigos(
 									Servidor.getEnemigosConectados()).clone();
 							pde.setComando(Comando.CONEXIONENEMIGOS);
-							
 							PaqueteDeUbicacionEnemigos pdue = (PaqueteDeUbicacionEnemigos) new PaqueteDeUbicacionEnemigos(
 									Servidor.getUbicacionEnemigos()).clone();
 							pdue.setComando(Comando.UBICACIONENEMIGOS);
-							
 							synchronized (conectado) {
 								conectado.getSalida().writeObject(gson.toJson(pdp));
 								conectado.getSalida().writeObject(gson.toJson(pde));

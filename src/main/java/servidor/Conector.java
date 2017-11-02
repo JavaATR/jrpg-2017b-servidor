@@ -27,6 +27,34 @@ public class Conector {
 	 * Conector. <br>
 	 */
 	Connection connect;
+	/**
+	 * Tres. <br>
+	 */
+	private static final int TRES = 3;
+	/**
+	 * Cuatro. <br>
+	 */
+	private static final int CUATRO = 4;
+	/**
+	 * Cinco. <br>
+	 */
+	private static final int CINCO = 5;
+	/**
+	 * Seis. <br>
+	 */
+	private static final int SEIS = 6;
+	/**
+	 * Siete. <br>
+	 */
+	private static final int SIETE = 7;
+	/**
+	 * Ocho. <br>
+	 */
+	private static final int OCHO = 8;
+	/**
+	 * Nueve. <br>
+	 */
+	private static final int NUEVE = 9;
 
 	/**
 	 * Se conecta con la base de datos del juego.
@@ -34,7 +62,7 @@ public class Conector {
 	 * <i>En caso de error indica que falló al intentar establecer una conexión
 	 * con la base de datos. </i><br>
 	 */
-	public void connect() {
+	public final void connect() {
 		try {
 			Servidor.log.append("Estableciendo conexión con la base de datos..." + System.lineSeparator());
 			connect = DriverManager.getConnection("jdbc:sqlite:" + url);
@@ -51,7 +79,7 @@ public class Conector {
 	 * <i>En caso de error indica un error al cerrar la conexión con la base de
 	 * datos.</i> <br>
 	 */
-	public void close() {
+	public final void close() {
 		try {
 			connect.close();
 		} catch (SQLException ex) {
@@ -71,7 +99,7 @@ public class Conector {
 	 * @return <b>true</b> si se registra al usuario.<br>
 	 *         <b>false</b> si no se lo registró. <br>
 	 */
-	public boolean registrarUsuario(final PaqueteUsuario user) {
+	public final boolean registrarUsuario(final PaqueteUsuario user) {
 		ResultSet result = null;
 		try {
 			PreparedStatement st1 = connect.prepareStatement("SELECT * FROM registro WHERE usuario= ? ");
@@ -82,7 +110,7 @@ public class Conector {
 						.prepareStatement("INSERT INTO registro (usuario, password, idPersonaje) VALUES (?,?,?)");
 				st.setString(1, user.getUsername());
 				st.setString(2, user.getPassword());
-				st.setInt(3, user.getIdPj());
+				st.setInt(TRES, user.getIdPj());
 				st.execute();
 				Servidor.log.append("El usuario " + user.getUsername() + " se ha registrado." + System.lineSeparator());
 				return true;
@@ -111,7 +139,7 @@ public class Conector {
 	 * @return <b>true</b> si se registra al personaje.<br>
 	 *         <b>false</b> si no se lo registró. <br>
 	 */
-	public boolean registrarPersonaje(final PaquetePersonaje paquetePersonaje, final PaqueteUsuario paqueteUsuario) {
+	public final boolean registrarPersonaje(final PaquetePersonaje paquetePersonaje, final PaqueteUsuario paqueteUsuario) {
 		try {
 			// Registro al personaje en la base de datos
 			PreparedStatement stRegistrarPersonaje = connect.prepareStatement(
@@ -119,18 +147,18 @@ public class Conector {
 					PreparedStatement.RETURN_GENERATED_KEYS);
 			stRegistrarPersonaje.setInt(1, -1);
 			stRegistrarPersonaje.setInt(2, -1);
-			stRegistrarPersonaje.setString(3, paquetePersonaje.getCasta());
-			stRegistrarPersonaje.setString(4, paquetePersonaje.getRaza());
-			stRegistrarPersonaje.setInt(5, paquetePersonaje.getFuerza());
-			stRegistrarPersonaje.setInt(6, paquetePersonaje.getDestreza());
-			stRegistrarPersonaje.setInt(7, paquetePersonaje.getInteligencia());
-			stRegistrarPersonaje.setInt(8, paquetePersonaje.getSaludTope());
-			stRegistrarPersonaje.setInt(9, paquetePersonaje.getEnergiaTope());
+			stRegistrarPersonaje.setString(TRES, paquetePersonaje.getCasta());
+			stRegistrarPersonaje.setString(CUATRO, paquetePersonaje.getRaza());
+			stRegistrarPersonaje.setInt(CINCO, paquetePersonaje.getFuerza());
+			stRegistrarPersonaje.setInt(SEIS, paquetePersonaje.getDestreza());
+			stRegistrarPersonaje.setInt(SIETE, paquetePersonaje.getInteligencia());
+			stRegistrarPersonaje.setInt(OCHO, paquetePersonaje.getSaludTope());
+			stRegistrarPersonaje.setInt(NUEVE, paquetePersonaje.getEnergiaTope());
 			stRegistrarPersonaje.setString(10, paquetePersonaje.getNombre());
 			stRegistrarPersonaje.setInt(11, 0);
 			stRegistrarPersonaje.setInt(12, 1);
 			stRegistrarPersonaje.setInt(13, -1);
-			stRegistrarPersonaje.setInt(14, 3);
+			stRegistrarPersonaje.setInt(14, TRES);
 			stRegistrarPersonaje.execute();
 			// Recupero la última key generada
 			ResultSet rs = stRegistrarPersonaje.getGeneratedKeys();
@@ -144,7 +172,7 @@ public class Conector {
 						.prepareStatement("UPDATE registro SET idPersonaje=? WHERE usuario=? AND password=?");
 				stAsignarPersonaje.setInt(1, idPersonaje);
 				stAsignarPersonaje.setString(2, paqueteUsuario.getUsername());
-				stAsignarPersonaje.setString(3, paqueteUsuario.getPassword());
+				stAsignarPersonaje.setString(TRES, paqueteUsuario.getPassword());
 				stAsignarPersonaje.execute();
 				// Por ultimo registro el inventario y la mochila
 				if (this.registrarInventarioMochila(idPersonaje)) {
@@ -169,13 +197,13 @@ public class Conector {
 	/**
 	 * Registra el inventario de un personaje.
 	 * <p>
-	 * <i>En caso de que no se le pueda crear el inventario se avisa. <br>
+	 * <i>En caso de que no se le pueda crear el inventario se avisa.</i> <br>
 	 * @param idInventarioMochila
 	 *            ID del inventario del personaje. <br>
 	 * @return <b>true</b> si se registra el inventario.<br>
 	 *         <b>false</b> si no se lo registra. <br>
 	 */
-	public boolean registrarInventarioMochila(final int idInventarioMochila) {
+	public final boolean registrarInventarioMochila(final int idInventarioMochila) {
 		try {
 			// Preparo la consulta para el registro el inventario en la base de
 			// datos
@@ -195,7 +223,7 @@ public class Conector {
 					.prepareStatement("UPDATE personaje SET idInventario=?, idMochila=? WHERE idPersonaje=?");
 			stAsignarPersonaje.setInt(1, idInventarioMochila);
 			stAsignarPersonaje.setInt(2, idInventarioMochila);
-			stAsignarPersonaje.setInt(3, idInventarioMochila);
+			stAsignarPersonaje.setInt(TRES, idInventarioMochila);
 			stAsignarPersonaje.execute();
 			Servidor.log.append("Se ha registrado el inventario de " + idInventarioMochila + System.lineSeparator());
 			return true;
@@ -216,7 +244,7 @@ public class Conector {
 	 * @return <b>true</b> si se logueó al usuario.<br>
 	 *         <b>false</b> si no se lo logueó. <br>
 	 */
-	final public boolean loguearUsuario(final PaqueteUsuario user) {
+	public final boolean loguearUsuario(final PaqueteUsuario user) {
 		ResultSet result = null;
 		try {
 			// Busco usuario y contraseña
@@ -245,11 +273,11 @@ public class Conector {
 	/**
 	 * Actualiza el personaje al dejar la partida.
 	 * <p>
-	 * <i>En caso de que no se pueda actualizar al personaje, se avisa. <br>
+	 * <i>En caso de que no se pueda actualizar al personaje, se avisa.</i> <br>
 	 * @param paquetePersonaje
 	 *            Personaje a guardar sus estados. <br>
 	 */
-	public void actualizarPersonaje(final PaquetePersonaje paquetePersonaje) {
+	public final void actualizarPersonaje(final PaquetePersonaje paquetePersonaje) {
 		try {
 			int i = 2;
 			int j = 1;
@@ -258,13 +286,13 @@ public class Conector {
 							+ "  WHERE idPersonaje=?");
 			stActualizarPersonaje.setInt(1, paquetePersonaje.getFuerza());
 			stActualizarPersonaje.setInt(2, paquetePersonaje.getDestreza());
-			stActualizarPersonaje.setInt(3, paquetePersonaje.getInteligencia());
-			stActualizarPersonaje.setInt(4, paquetePersonaje.getSaludTope());
-			stActualizarPersonaje.setInt(5, paquetePersonaje.getEnergiaTope());
-			stActualizarPersonaje.setInt(6, paquetePersonaje.getExperiencia());
-			stActualizarPersonaje.setInt(7, paquetePersonaje.getNivel());
-			stActualizarPersonaje.setInt(8, paquetePersonaje.getId());
-			stActualizarPersonaje.setInt(9, paquetePersonaje.getPuntosAsignar());
+			stActualizarPersonaje.setInt(TRES, paquetePersonaje.getInteligencia());
+			stActualizarPersonaje.setInt(CUATRO, paquetePersonaje.getSaludTope());
+			stActualizarPersonaje.setInt(CINCO, paquetePersonaje.getEnergiaTope());
+			stActualizarPersonaje.setInt(SEIS, paquetePersonaje.getExperiencia());
+			stActualizarPersonaje.setInt(SIETE, paquetePersonaje.getNivel());
+			stActualizarPersonaje.setInt(OCHO, paquetePersonaje.getId());
+			stActualizarPersonaje.setInt(NUEVE, paquetePersonaje.getPuntosAsignar());
 			stActualizarPersonaje.executeUpdate();
 			PreparedStatement stDameItemsID = connect.prepareStatement("SELECT * FROM mochila WHERE idMochila = ?");
 			stDameItemsID.setInt(1, paquetePersonaje.getId());
@@ -272,7 +300,7 @@ public class Conector {
 			PreparedStatement stDatosItem = connect.prepareStatement("SELECT * FROM item WHERE idItem = ?");
 			ResultSet resultadoDatoItem = null;
 			paquetePersonaje.eliminarItems();
-			while (j <= 9) {
+			while (j <= NUEVE) {
 				if (resultadoItemsID.getInt(i) != -1) {
 					stDatosItem.setInt(1, resultadoItemsID.getInt(i));
 					resultadoDatoItem = stDatosItem.executeQuery();
@@ -288,7 +316,6 @@ public class Conector {
 			}
 			Servidor.log.append("El personaje " + paquetePersonaje.getNombre() + " se ha actualizado con éxito."
 					+ System.lineSeparator());
-			;
 		} catch (SQLException e) {
 			Servidor.log.append("Fallo al intentar actualizar el personaje " + paquetePersonaje.getNombre()
 					+ System.lineSeparator());
@@ -298,7 +325,7 @@ public class Conector {
 	/**
 	 * Devuelve el personaje del cliente. <br>
 	 * <i>En caso de que no se pueda obtener al personaje, se avisa y se le crea
-	 * uno nuevo. <br>
+	 * uno nuevo. </i><br>
 	 * @param user
 	 *            Cliente. <br>
 	 * @return Personaje del cliente. En caso de no tener uno previo, se lo
@@ -307,7 +334,7 @@ public class Conector {
 	 *             En caso de no poder crear el paquete de personaje tira error.
 	 *             <br>
 	 */
-	public PaquetePersonaje getPersonaje(final PaqueteUsuario user) throws IOException {
+	public final PaquetePersonaje getPersonaje(final PaqueteUsuario user) throws IOException {
 		ResultSet result = null;
 		ResultSet resultadoItemsID = null;
 		ResultSet resultadoDatoItem = null;
@@ -345,7 +372,7 @@ public class Conector {
 			personaje.setExperiencia(result.getInt("experiencia"));
 			personaje.setNivel(result.getInt("nivel"));
 			personaje.setPuntosAsignar(result.getInt("puntosAsignar"));
-			while (j <= 9) {
+			while (j <= NUEVE) {
 				if (resultadoItemsID.getInt(i) != -1) {
 					stDatosItem.setInt(1, resultadoItemsID.getInt(i));
 					resultadoDatoItem = stDatosItem.executeQuery();
@@ -372,12 +399,12 @@ public class Conector {
 	 * Obtiene el usuario del cliente.
 	 * <p>
 	 * <i>En caso de que no se pueda obtener al usuario, avisa y se le crea uno
-	 * nuevo. <br>
+	 * nuevo.</i> <br>
 	 * @param usuario
 	 *            Usuario. <br>
 	 * @return Usuario. <br>
 	 */
-	public PaqueteUsuario getUsuario(final String usuario) {
+	public final PaqueteUsuario getUsuario(final String usuario) {
 		ResultSet result = null;
 		PreparedStatement st;
 		try {
@@ -403,7 +430,7 @@ public class Conector {
 	 * @param paquetePersonaje
 	 *            Personaje del cliente. <br>
 	 */
-	public void actualizarInventario(final PaquetePersonaje paquetePersonaje) {
+	public final void actualizarInventario(final PaquetePersonaje paquetePersonaje) {
 		int i = 0;
 		PreparedStatement stActualizarMochila;
 		try {
@@ -427,11 +454,11 @@ public class Conector {
 	 * Actualiza el inventario del personaje.
 	 * <p>
 	 * <i>En caso de que no se pueda actualizar el inventario del personaje, se
-	 * avisa. <br>
+	 * avisa. </i><br>
 	 * @param idPersonaje
 	 *            ID del personaje. <br>
 	 */
-	public void actualizarInventario(final int idPersonaje) {
+	public final void actualizarInventario(final int idPersonaje) {
 		int i = 0;
 		PaquetePersonaje paquetePersonaje = Servidor.getPersonajesConectados().get(idPersonaje);
 		PreparedStatement stActualizarMochila;
@@ -443,7 +470,7 @@ public class Conector {
 				stActualizarMochila.setInt(i + 1, paquetePersonaje.getItemID(i));
 				i++;
 			}
-			if (paquetePersonaje.getCantItems() < 9) {
+			if (paquetePersonaje.getCantItems() < NUEVE) {
 				int itemGanado = new Random().nextInt(29);
 				itemGanado += 1;
 				stActualizarMochila.setInt(paquetePersonaje.getCantItems() + 1, itemGanado);
@@ -465,24 +492,24 @@ public class Conector {
 	/**
 	 * Actualiza los stats del personaje que subió de nivel.
 	 * <p>
-	 * <i>En caso de que no se pueda actualizar al personaje, se avisa. <br>
+	 * <i>En caso de que no se pueda actualizar al personaje, se avisa. </i><br>
 	 * @param paquetePersonaje
 	 *            Personaje del cliente. <br>
 	 */
-	public void actualizarPersonajeSubioNivel(final PaquetePersonaje paquetePersonaje) {
+	public final void actualizarPersonajeSubioNivel(final PaquetePersonaje paquetePersonaje) {
 		try {
 			PreparedStatement stActualizarPersonaje = connect.prepareStatement(
 					"UPDATE personaje SET fuerza=?, destreza=?, inteligencia=?, saludTope=?, energiaTope=?, experiencia=?, nivel=?, puntosAsignar=? "
 							+ "  WHERE idPersonaje=?");
 			stActualizarPersonaje.setInt(1, paquetePersonaje.getFuerza());
 			stActualizarPersonaje.setInt(2, paquetePersonaje.getDestreza());
-			stActualizarPersonaje.setInt(3, paquetePersonaje.getInteligencia());
-			stActualizarPersonaje.setInt(4, paquetePersonaje.getSaludTope());
-			stActualizarPersonaje.setInt(5, paquetePersonaje.getEnergiaTope());
-			stActualizarPersonaje.setInt(6, paquetePersonaje.getExperiencia());
-			stActualizarPersonaje.setInt(7, paquetePersonaje.getNivel());
-			stActualizarPersonaje.setInt(8, paquetePersonaje.getId());
-			stActualizarPersonaje.setInt(9, paquetePersonaje.getPuntosAsignar());
+			stActualizarPersonaje.setInt(TRES, paquetePersonaje.getInteligencia());
+			stActualizarPersonaje.setInt(CUATRO, paquetePersonaje.getSaludTope());
+			stActualizarPersonaje.setInt(CINCO, paquetePersonaje.getEnergiaTope());
+			stActualizarPersonaje.setInt(SEIS, paquetePersonaje.getExperiencia());
+			stActualizarPersonaje.setInt(SIETE, paquetePersonaje.getNivel());
+			stActualizarPersonaje.setInt(OCHO, paquetePersonaje.getId());
+			stActualizarPersonaje.setInt(NUEVE, paquetePersonaje.getPuntosAsignar());
 			stActualizarPersonaje.executeUpdate();
 			Servidor.log.append("El personaje " + paquetePersonaje.getNombre() + " se ha actualizado con éxito."
 					+ System.lineSeparator());

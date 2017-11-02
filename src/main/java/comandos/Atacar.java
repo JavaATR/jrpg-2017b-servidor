@@ -16,7 +16,7 @@ public class Atacar extends ComandosServer {
 	 * <i>En caso de que no se pueda realizar el ataque, se avisa.</i> <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		escuchaCliente.setPaqueteAtacar((PaqueteAtacar) gson.fromJson(cadenaLeida, PaqueteAtacar.class));
 		for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
 			if (conectado.getIdPersonaje() == escuchaCliente.getPaqueteAtacar().getIdEnemigo()) {

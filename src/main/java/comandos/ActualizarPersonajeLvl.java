@@ -18,7 +18,7 @@ public class ActualizarPersonajeLvl extends ComandosServer {
 	 * <br>
 	 */
 	@Override
-	public void ejecutar() {
+	public final void ejecutar() {
 		escuchaCliente.setPaquetePersonaje((PaquetePersonaje) gson.fromJson(cadenaLeida, PaquetePersonaje.class));
 		Servidor.getConector().actualizarPersonajeSubioNivel(escuchaCliente.getPaquetePersonaje());
 		Servidor.getPersonajesConectados().remove(escuchaCliente.getPaquetePersonaje().getId());
