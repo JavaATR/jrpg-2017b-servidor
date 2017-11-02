@@ -100,12 +100,10 @@ public class Conector {
 	 *         <b>false</b> si no se lo registró. <br>
 	 */
 	public final boolean registrarUsuario(final PaqueteUsuario user) {
-		ResultSet result = null;
 		try {
 			PreparedStatement st1 = connect.prepareStatement("SELECT * FROM registro WHERE usuario= ? ");
 			st1.setString(1, user.getUsername());
-			result = st1.executeQuery();
-			if (!result.next()) {
+			if (!st1.executeQuery().next()) {
 				PreparedStatement st = connect
 						.prepareStatement("INSERT INTO registro (usuario, password, idPersonaje) VALUES (?,?,?)");
 				st.setString(1, user.getUsername());
@@ -117,13 +115,12 @@ public class Conector {
 			} else {
 				Servidor.log.append(
 						"El usuario " + user.getUsername() + " ya se encuentra en uso." + System.lineSeparator());
-				return false;
 			}
 		} catch (SQLException ex) {
 			Servidor.log.append("Eror al intentar registrar el usuario " + user.getUsername() + System.lineSeparator());
 			System.err.println(ex.getMessage());
-			return false;
-		}
+		} 
+		return false;
 	}
 
 	/**
@@ -183,15 +180,13 @@ public class Conector {
 					Servidor.log.append(
 							"Error al registrar la mochila y el inventario del usuario " + paqueteUsuario.getUsername()
 									+ " con el personaje" + paquetePersonaje.getId() + System.lineSeparator());
-					return false;
 				}
 			}
-			return false;
 		} catch (SQLException e) {
 			Servidor.log.append(
 					"Error al intentar crear el personaje " + paquetePersonaje.getNombre() + System.lineSeparator());
-			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -262,12 +257,11 @@ public class Conector {
 			// Si no existe informo y devuelvo false
 			Servidor.log.append("El usuario " + user.getUsername()
 					+ " ha realizado un intento fallido de inicio de sesión." + System.lineSeparator());
-			return false;
 		} catch (SQLException e) {
 			Servidor.log
 					.append("El usuario " + user.getUsername() + " fallo al iniciar sesión." + System.lineSeparator());
-			return false;
 		}
+		return false;
 	}
 
 	/**

@@ -346,21 +346,15 @@ public class Servidor extends Thread {
 	 *         <br>
 	 */
 	public static boolean mensajeAAll(final int contador) {
-		boolean result = true;
+		// Compruebo que estén todos conectados.
 		if (personajesConectados.size() != contador + 1) {
-			result = false;
-		}
-		// Si existe inicio sesion
-		if (result) {
 			Servidor.log.append("Se ha enviado un mensaje a todos los usuarios" + System.lineSeparator());
 			return true;
-		} else {
-			// Si no existe informo y devuelvo false
-			Servidor.log
-					.append("Uno o más de todos los usuarios se ha desconectado, se ha mandado el mensaje a los demas."
-							+ System.lineSeparator());
-			return false;
 		}
+		// Si no existe informo y devuelvo false
+		Servidor.log.append("Uno o más de todos los usuarios se ha desconectado, se ha mandado el mensaje a los demas."
+				+ System.lineSeparator());
+		return false;
 	}
 
 	/**
