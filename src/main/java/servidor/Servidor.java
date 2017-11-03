@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -65,9 +67,21 @@ public class Servidor extends Thread {
 	 */
 	private static Conector conexionDB;
 	/**
+	 * Defino de donde se saca el puerto del juego. <br>
+	 */
+	Properties prop = new Properties();
+	{
+		try {
+			prop.load(new FileInputStream("puerto.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
 	 * Puerto del juego. <br>
 	 */
-	private final int puerto = 55050;
+
+	private final int puerto = Integer.valueOf(prop.getProperty("puerto"));
 	/**
 	 * Ancho de la pantalla de log. <br>
 	 */
@@ -171,6 +185,7 @@ public class Servidor extends Thread {
 
 	/**
 	 * Carga la interfaz visual del servidor. <br>
+	 *
 	 * @param args
 	 *            argumentos. <br>
 	 */
@@ -308,9 +323,9 @@ public class Servidor extends Thread {
 
 	/**
 	 * Envía un mensaje a un cliente. <br>
+	 *
 	 * @param pqm
-	 *            Paquete de mensaje del cliente al que se le envía el mensaje.
-	 *            <br>
+	 *            Paquete de mensaje del cliente al que se le envía el mensaje. <br>
 	 * @return <b>true</b> si se lo logró envíar.<br>
 	 *         <b>false</b> si se encuentra desconectado. <br>
 	 */
@@ -318,9 +333,9 @@ public class Servidor extends Thread {
 		Iterator<Map.Entry<Integer, PaquetePersonaje>> iterator = personajesConectados.entrySet().iterator();
 		Map.Entry<Integer, PaquetePersonaje> entry = iterator.next();
 		while (iterator.hasNext() && !entry.getValue().getNombre().equals(pqm.getUserReceptor())) {
-			entry = iterator.next();	
+			entry = iterator.next();
 		}
-		// Si existe inicio sesion 
+		// Si existe inicio sesion
 		if (entry.getValue().getNombre().equals(pqm.getUserReceptor())) {
 			Servidor.log
 					.append(pqm.getUserEmisor() + " envió mensaje a " + pqm.getUserReceptor() + System.lineSeparator());
@@ -334,11 +349,11 @@ public class Servidor extends Thread {
 
 	/**
 	 * Envía un mensaje a todos los usuarios. <br>
+	 *
 	 * @param contador
 	 *            Contador de personajes conectados. <br>
 	 * @return <b>true</b> si se le envío el mensaje a todos los usuarios.<br>
-	 *         <b>false</b> si se lo envío a casi todos o a los que se pudo.
-	 *         <br>
+	 *         <b>false</b> si se lo envío a casi todos o a los que se pudo. <br>
 	 */
 	public static boolean mensajeAAll(final int contador) {
 		// Compruebo que estén todos conectados.
@@ -354,6 +369,7 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista con los clientes conectados. <br>
+	 *
 	 * @return Clientes conectados. <br>
 	 */
 	public static ArrayList<EscuchaCliente> getClientesConectados() {
@@ -362,6 +378,7 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista con la ubicación de los personajes. <br>
+	 *
 	 * @return Ubicación de los personajes. <br>
 	 */
 	public static Map<Integer, PaqueteMovimiento> getUbicacionPersonajes() {
@@ -370,6 +387,7 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista con los personajes conectados. <br>
+	 *
 	 * @return Personajes conectados. <br>
 	 */
 	public static Map<Integer, PaquetePersonaje> getPersonajesConectados() {
@@ -378,6 +396,7 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista con la ubicación de los enemigos. <br>
+	 *
 	 * @return Ubicación de los enemigos. <br>
 	 */
 	public static Map<Integer, PaqueteMovimiento> getUbicacionEnemigos() {
@@ -386,6 +405,7 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve una lista de los enemigos conectados. <br>
+	 *
 	 * @return Enemigos conectados. <br>
 	 */
 	public static Map<Integer, PaqueteEnemigo> getEnemigosConectados() {
@@ -394,6 +414,7 @@ public class Servidor extends Thread {
 
 	/**
 	 * Devuelve el conector a la base de datos. <br>
+	 *
 	 * @return Conector a la base de datos. <br>
 	 */
 	public static Conector getConector() {
