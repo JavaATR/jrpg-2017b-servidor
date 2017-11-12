@@ -25,8 +25,10 @@ public class FinalizarBatalla extends ComandosServer {
 		Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteFinalizarBatalla().getId())
 				.setEstado(Estado.estadoJuego);
 		if (escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo() < 0) {
-			Servidor.getEnemigosConectados().get(escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo() * -1 + 1)
-					.setEstado(Estado.estadoJuego);
+			Servidor.getEnemigosConectados().get(escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo() * -1 - 1)
+			.setEstado(Estado.estadoJuego);
+			if (paqueteFinalizarBatalla.getGanadorBatalla() != paqueteFinalizarBatalla.getIdEnemigo())
+				Servidor.regenerarBryan(escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo());
 		} else {
 			Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteFinalizarBatalla().getIdEnemigo())
 					.setEstado(Estado.estadoJuego);

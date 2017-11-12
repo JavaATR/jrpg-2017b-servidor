@@ -28,7 +28,7 @@ public class Batalla extends ComandosServer {
 				// Seteo estado de batalla
 				Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteBatalla().getId())
 						.setEstado(Estado.estadoBatalla);
-				Servidor.getEnemigosConectados().get(escuchaCliente.getPaqueteBatalla().getIdEnemigo() * -1 + 1)
+				Servidor.getEnemigosConectados().get(escuchaCliente.getPaqueteBatalla().getIdEnemigo() * -1 -1)
 						.setEstado(Estado.estadoBatalla);
 				escuchaCliente.getPaqueteBatalla().setMiTurno(true);
 				escuchaCliente.getSalida().writeObject(gson.toJson(escuchaCliente.getPaqueteBatalla()));

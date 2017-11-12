@@ -55,6 +55,11 @@ public class Servidor extends Thread {
 	 */
 	private static Map<Integer, PaqueteMovimiento> ubicacionEnemigos = new HashMap<>();
 	/**
+	 * Ubicación posibles para la regeneración de los enemigos. <br>
+	 */
+	private static int[][] ubicacionesPosiblesEnemigos = {{160, 353, 225, -577, 97, 609, 1057, 959, 607, 192, -225, -415, -1055, -255, 511, 223, 287, 284, 287, 283, 282},
+															{273, 975, 1360, 1567, 1872, 1935, 1711, 1535, 1520, 1216, 1072, 752, 559, 160, 319, 367, 1135, 1137, 1487, 1491, 1484}};
+	/**
 	 * Hilo principal del servidor. <br>
 	 */
 	private static Thread server;
@@ -425,32 +430,74 @@ public class Servidor extends Thread {
 	 * Genera los npc. <br>
 	 */
 	public final void generarEnemigos() {
-		generateBryans();
-	}
-
-	/**
-	 * Genera a los "bryan" en el mapa. <br>
-	 */
-	private void generateBryans() {
-		Random randomGenerator = new Random(); // Random generator para las
-												// posiciones
+		Random randomGenerator = new Random(); // Random generator para las	posiciones
 		Integer i = 0, id = -1;
-		PaqueteEnemigo bryans[] = new PaqueteEnemigo[10]; // Creo array de 10
-															// Bryans y otro
-															// para sus
-															// posiciones
+		PaqueteEnemigo bryans[] = new PaqueteEnemigo[10]; // Creo array de 10 Bryans y otro para sus posiciones
 		PaqueteMovimiento posicionesBryans[] = new PaqueteMovimiento[10];
 		enemigosConectados = new HashMap<Integer, PaqueteEnemigo>();
 		ubicacionEnemigos = new HashMap<Integer, PaqueteMovimiento>();
 		for (i = 0; i < bryans.length; i++) {
 			bryans[i] = new PaqueteEnemigo(id);
-			posicionesBryans[i] = new PaqueteMovimiento(id, POSXBRYAN + (i * POSXIBRYAN), POSYBRYAN + (i * POSYIBRYAN)); // TODO:
-																															// Generacion
-																															// de
-																															// posiciones
+			posicionesBryans[i] = generarPosicion(id);
 			enemigosConectados.put(i, bryans[i]); // Paso los arrays a hashmaps
 			ubicacionEnemigos.put(i, posicionesBryans[i]);
 			id--;
 		}
+	}
+	
+	public static PaqueteMovimiento generarPosicion(int id) {
+		PaqueteMovimiento posicionBryan = new PaqueteMovimiento();		
+		Random randomCoordinates = new Random();
+		int indiceUbicacion = 0;
+		Boolean posicionOcupada;
+		
+		do {
+			posicionOcupada = false;
+			
+			indiceUbicacion = randomCoordinates.nextInt(ubicacionesPosiblesEnemigos[0].length);
+			
+			posicionBryan.setPosX(ubicacionesPosiblesEnemigos[0][indiceUbicacion]);
+			posicionBryan.setPosY(ubicacionesPosiblesEnemigos[1][indiceUbicacion]);
+			
+			for(Map.Entry<Integer, PaqueteMovimiento> entry : ubicacionEnemigos.entrySet()) {
+			    PaqueteMovimiento value = entry.getValue();
+
+			    if (value.getPosX() == posicionBryan.getPosX())
+			    	posicionOcupada = true;
+			}
+		} while (posicionOcupada);
+		
+		posicionBryan.setIdPersonaje(id);
+		
+		return posicionBryan;
+	}
+	
+	public static void regenerarBryan(int id) {
+		PaqueteMovimiento posicionNuevoBryan;
+		
+		do {
+			posicionNuevoBryan = generarPosicion(id);
+			
+			ubicacionEnemigos.put(id * -1 -1, posicionNuevoBryan);
+		} while (isInPlayersVision(posicionNuevoBryan.getPosX(), posicionNuevoBryan.getPosY()));
+	}
+	
+	private static Boolean isInPlayersVision(float x, float y)
+	{
+		Boolean isInPlayersVision = false;
+	    float diferenciaX, diferenciaY;
+		
+		for(Map.Entry<Integer, PaqueteMovimiento> entry : ubicacionPersonajes.entrySet()) {
+		    PaqueteMovimiento value = entry.getValue();
+		    
+		    diferenciaX = value.getPosX() - x;
+		    diferenciaY = value.getPosY() - y;
+
+		    // Los Bryan se encuentran en nuestro rango de visión si se cumple lo siguiente, calculado usando trigonometría
+		    if (Math.sqrt((double)(Math.abs(diferenciaX * diferenciaX) + Math.abs(diferenciaY * diferenciaX))) < 464)
+		    	isInPlayersVision = true;
+		}
+		
+		return isInPlayersVision;
 	}
 }
