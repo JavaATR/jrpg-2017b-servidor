@@ -97,28 +97,38 @@ public class Talk extends ComandosServer {
 	}
 
 	private void ponerPersonajeEnModoInvisible(int idUser) {
-		// TODO Auto-generated method stub
+		PaquetePersonaje personajeEditado = Servidor.getPersonajesConectados().get(idUser);
+		personajeEditado.setTrucoActivado(4);
 		
+		Servidor.getPersonajesConectados().put(idUser, personajeEditado);
 	}
 
 	private void ponerPersonajeEnModoExtraFuerza(int idUser) {
-		// TODO Auto-generated method stub
+		PaquetePersonaje personajeEditado = Servidor.getPersonajesConectados().get(idUser);
+		personajeEditado.setFuerza(personajeEditado.getFuerza() * 2);
 		
+		Servidor.getPersonajesConectados().put(idUser, personajeEditado);
 	}
 	
 	private void ponerPersonajeEnModoMitadFuerza(int idUser) {
-		// TODO Auto-generated method stub
+		PaquetePersonaje personajeEditado = Servidor.getPersonajesConectados().get(idUser);
+		personajeEditado.setFuerza(personajeEditado.getFuerza() / 2);
 		
+		Servidor.getPersonajesConectados().put(idUser, personajeEditado);
 	}
 
 	private void permitirPersonajeAtravesarParedes(int idUser) {
-		// TODO Auto-generated method stub
+		PaquetePersonaje personajeEditado = Servidor.getPersonajesConectados().get(idUser);
+		personajeEditado.setTrucoActivado(1);
 		
+		Servidor.getPersonajesConectados().put(idUser, personajeEditado);
 	}
 
 	private void ponerPersonajeEnModoDios(int idUser) {
-		// TODO Auto-generated method stub
+		PaquetePersonaje personajeEditado = Servidor.getPersonajesConectados().get(idUser);
+		personajeEditado.setTrucoActivado(0);
 		
+		Servidor.getPersonajesConectados().put(idUser, personajeEditado);
 	}
 
 	private int mensajeEsTruco(String mensaje) {
