@@ -10,6 +10,10 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import mensajeria.PaquetePersonaje;
 import mensajeria.PaqueteUsuario;
 
@@ -20,9 +24,13 @@ import mensajeria.PaqueteUsuario;
  */
 public class Conector {
 	/**
-	 * Nombre de la base de datos. <br>
+	 * Configuración de la conexión con la base de datos. <br>
 	 */
-	private String url = "primeraBase.bd";
+	Configuration configuration;
+	/**
+	 * Session Factory de la configuración. <br>
+	 */
+	SessionFactory sessionFactory;
 	/**
 	 * Conector. <br>
 	 */
@@ -65,12 +73,16 @@ public class Conector {
 	public final void connect() {
 		try {
 			Servidor.log.append("Estableciendo conexión con la base de datos..." + System.lineSeparator());
-			connect = DriverManager.getConnection("jdbc:sqlite:" + url);
+			this.configuration = new Configuration();
+					this.configuration.configure("hibernate.cfg.xml");
+			this.sessionFactory = this.configuration.buildSessionFactory();
+			this.connect = DriverManager.getConnection(this.configuration.getProperty("hibernate.connection.url"));
+			System.out.println();
 			Servidor.log.append("Conexión con la base de datos establecida con éxito." + System.lineSeparator());
-		} catch (SQLException ex) {
+		} catch (SQLException | HibernateException ex) {
 			Servidor.log.append("Fallo al intentar establecer la conexión con la base de datos. " + ex.getMessage()
 					+ System.lineSeparator());
-		}
+		} 
 	}
 
 	/**
@@ -119,7 +131,7 @@ public class Conector {
 		} catch (SQLException ex) {
 			Servidor.log.append("Eror al intentar registrar el usuario " + user.getUsername() + System.lineSeparator());
 			System.err.println(ex.getMessage());
-		} 
+		}
 		return false;
 	}
 
@@ -129,6 +141,7 @@ public class Conector {
 	 * <i>En caso de que no se le pueda crear el inventario se avisa. <br>
 	 * En caso de ocurrir otro tipo de error se informa el error de registro del
 	 * personaje.</i><br>
+	 * 
 	 * @param paquetePersonaje
 	 *            Personaje del usuario. <br>
 	 * @param paqueteUsuario
@@ -136,7 +149,8 @@ public class Conector {
 	 * @return <b>true</b> si se registra al personaje.<br>
 	 *         <b>false</b> si no se lo registró. <br>
 	 */
-	public final boolean registrarPersonaje(final PaquetePersonaje paquetePersonaje, final PaqueteUsuario paqueteUsuario) {
+	public final boolean registrarPersonaje(final PaquetePersonaje paquetePersonaje,
+			final PaqueteUsuario paqueteUsuario) {
 		try {
 			// Registro al personaje en la base de datos
 			PreparedStatement stRegistrarPersonaje = connect.prepareStatement(
@@ -193,6 +207,7 @@ public class Conector {
 	 * Registra el inventario de un personaje.
 	 * <p>
 	 * <i>En caso de que no se le pueda crear el inventario se avisa.</i> <br>
+	 * 
 	 * @param idInventarioMochila
 	 *            ID del inventario del personaje. <br>
 	 * @return <b>true</b> si se registra el inventario.<br>
@@ -234,6 +249,7 @@ public class Conector {
 	 * <i>En caso de que no se pueda loguear al usuario, se avisa. <br>
 	 * En caso de ocurrir otro tipo de error se informa el error de logueo de
 	 * usuario. </i><br>
+	 * 
 	 * @param user
 	 *            Usuario a conectar. <br>
 	 * @return <b>true</b> si se logueó al usuario.<br>
@@ -268,6 +284,7 @@ public class Conector {
 	 * Actualiza el personaje al dejar la partida.
 	 * <p>
 	 * <i>En caso de que no se pueda actualizar al personaje, se avisa.</i> <br>
+	 * 
 	 * @param paquetePersonaje
 	 *            Personaje a guardar sus estados. <br>
 	 */
@@ -320,6 +337,7 @@ public class Conector {
 	 * Devuelve el personaje del cliente. <br>
 	 * <i>En caso de que no se pueda obtener al personaje, se avisa y se le crea
 	 * uno nuevo. </i><br>
+	 * 
 	 * @param user
 	 *            Cliente. <br>
 	 * @return Personaje del cliente. En caso de no tener uno previo, se lo
@@ -394,6 +412,7 @@ public class Conector {
 	 * <p>
 	 * <i>En caso de que no se pueda obtener al usuario, avisa y se le crea uno
 	 * nuevo.</i> <br>
+	 * 
 	 * @param usuario
 	 *            Usuario. <br>
 	 * @return Usuario. <br>
@@ -421,6 +440,7 @@ public class Conector {
 
 	/**
 	 * Actualiza el inventario del personaje. <br>
+	 * 
 	 * @param paquetePersonaje
 	 *            Personaje del cliente. <br>
 	 */
@@ -449,6 +469,7 @@ public class Conector {
 	 * <p>
 	 * <i>En caso de que no se pueda actualizar el inventario del personaje, se
 	 * avisa. </i><br>
+	 * 
 	 * @param idPersonaje
 	 *            ID del personaje. <br>
 	 */
@@ -487,6 +508,7 @@ public class Conector {
 	 * Actualiza los stats del personaje que subió de nivel.
 	 * <p>
 	 * <i>En caso de que no se pueda actualizar al personaje, se avisa. </i><br>
+	 * 
 	 * @param paquetePersonaje
 	 *            Personaje del cliente. <br>
 	 */
