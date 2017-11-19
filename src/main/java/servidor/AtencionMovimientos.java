@@ -1,10 +1,16 @@
 package servidor;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 import com.google.gson.Gson;
 
 import estados.Estado;
 import mensajeria.Comando;
 import mensajeria.PaqueteDeMovimientos;
+import mensajeria.PaqueteMovimiento;
+import mensajeria.PaquetePersonaje;
 
 /**
  * Clase que administra un escucha de movimientos general de todos los
@@ -43,8 +49,28 @@ public class AtencionMovimientos extends Thread {
 							PaqueteDeMovimientos pdp = (PaqueteDeMovimientos) new PaqueteDeMovimientos(
 									Servidor.getUbicacionPersonajes()).clone();
 							pdp.setComando(Comando.MOVIMIENTO);
+							
+							ArrayList<PaqueteMovimiento> personajesInvisibles = new ArrayList<PaqueteMovimiento>();
+							// Si el personaje a quien le voy a actualizar los movimientos no está en modo invisible, no permito que vea a los que si son invisibles
+							if (conectado.getPaquetePersonaje().getTrucosActivados().indexOf(4) == -1) {
+								Iterator<Map.Entry<Integer, PaqueteMovimiento>> it = pdp.getPersonajes().entrySet().iterator();
+								while (it.hasNext()) {
+								    Map.Entry<Integer, PaqueteMovimiento> entry = it.next();
+								    if(Servidor.getPersonajesConectados().get(entry.getValue().getIdPersonaje()).getTrucosActivados().indexOf(4) != -1){
+								    	personajesInvisibles.add(Servidor.getUbicacionPersonajes().get(entry.getValue().getIdPersonaje()));
+								        // Elimino las ubicaciones de los personajes invisibles momentáneamente, para fingir que no están para los jugadores visibles
+								    	it.remove();
+								    }
+								}
+							}
+							
 							synchronized (conectado) {
 								conectado.getSalida().writeObject(gson.toJson(pdp));
+							}
+							
+							// Vuelvo a insertar las ubicaciones de los jugadores invisibles.
+							for (PaqueteMovimiento personajeInvisible : personajesInvisibles) {
+								Servidor.getUbicacionPersonajes().put(personajeInvisible.getIdPersonaje(), personajeInvisible);
 							}
 						}
 					}

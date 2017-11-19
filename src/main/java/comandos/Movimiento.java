@@ -25,7 +25,7 @@ public class Movimiento extends ComandosServer {
 		Servidor.getUbicacionPersonajes().get(escuchaCliente
 				.getPaqueteMovimiento().getIdPersonaje())
 				.setDireccion(escuchaCliente.getPaqueteMovimiento()
-						.getDireccion());
+				.getDireccion());
 		Servidor.getUbicacionPersonajes().get(escuchaCliente.
 				getPaqueteMovimiento().getIdPersonaje())
 				.setFrame(escuchaCliente.getPaqueteMovimiento().getFrame());
