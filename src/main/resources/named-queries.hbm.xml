@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-mapping>
+	<!--Comprueba si existe un usuario. -->
+	<query name="HQL_OBTENER_USUARIO">
+		<![CDATA[SELECT username, password, idPj FROM mensajeria.PaqueteUsuario WHERE username = :usuario]]>
+	</query>
+	<!--Comprueba si es el usuario correcto. -->
+	<query name="HQL_LOGUEAR_USUARIO">
+		<![CDATA[SELECT 1 FROM mensajeria.PaqueteUsuario WHERE username = :usuario AND password = :password]]>
+	</query>
+	<!--Obtiene el id de un personaje. -->
+	<query name="HQL_ID_PERSONAJE">
+		<![CDATA[SELECT id FROM mensajeria.PaquetePersonaje WHERE id = :id]]>
+	</query>
+</hibernate-mapping>
