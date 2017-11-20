@@ -10,7 +10,8 @@
 		<property name="show_sql">true</property>
 		<property name="format_sql">true</property>
 
-		<mapping resource="servidor/PaquetePersonaje.hbm.xml" />
-		<mapping resource="servidor/PaqueteUsuario.hbm.xml" />
+		<mapping resource="PaquetePersonaje.hbm.xml" />
+		<mapping resource="PaqueteUsuario.hbm.xml" />
+		<mapping resource="named-queries.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>
