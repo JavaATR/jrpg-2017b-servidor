@@ -12,6 +12,7 @@
 
 		<mapping resource="PaquetePersonaje.hbm.xml" />
 		<mapping resource="PaqueteUsuario.hbm.xml" />
-		<mapping resource="named-queries.hbm.xml" />
+		<mapping resource="Item.hbm.xml" /> 
+		<mapping resource="named-queries.hbm.xml" /> 
 	</session-factory>
 </hibernate-configuration>

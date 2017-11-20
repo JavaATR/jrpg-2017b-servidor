@@ -3,16 +3,35 @@
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-mapping>
-	<!--Comprueba si existe un usuario. -->
+	<!--Comprueba si existe un usuario con ese nombre. -->
 	<query name="HQL_OBTENER_USUARIO">
-		<![CDATA[SELECT username, password, idPj FROM mensajeria.PaqueteUsuario WHERE username = :usuario]]>
+		<![CDATA[FROM mensajeria.PaqueteUsuario WHERE username = :usuario]]>
 	</query>
-	<!--Comprueba si es el usuario correcto. -->
+	
+	<!--Comprueba si el logueo de usuario es correcto. -->
 	<query name="HQL_LOGUEAR_USUARIO">
 		<![CDATA[SELECT 1 FROM mensajeria.PaqueteUsuario WHERE username = :usuario AND password = :password]]>
 	</query>
+	
 	<!--Obtiene el id de un personaje. -->
 	<query name="HQL_ID_PERSONAJE">
 		<![CDATA[SELECT id FROM mensajeria.PaquetePersonaje WHERE id = :id]]>
 	</query>
+	
+	<!--Obtiene un personaje. -->
+	<query name="HQL_GET_PERSONAJE">
+		<![CDATA[FROM mensajeria.PaquetePersonaje WHERE id = :id]]>
+	</query>
+	
+	<!--Obtiene un item. -->
+	<query name="HQL_GET_ITEM">
+		<![CDATA[FROM dominio.Item WHERE idItem = :idItem]]>
+	</query>
+	
+	
+	<!--Inserta una nueva mochila. 
+	<query name="HQL_INSERTAR_MOCHILA">
+		<![CDATA[INSERT INTO mochila(idMochila, item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14, item15, item16, item17, item18, item19, item20) 
+				 VALUES(:id, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)]]>
+	</query> -->
 </hibernate-mapping>
