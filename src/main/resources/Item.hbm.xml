@@ -5,7 +5,6 @@
 	<class name="dominio.Item" table="item">
 		<id       column="idItem"            name="idItem"            type="int"  > <generator class="increment"/> </id>
 		<property column="nombre"            name="nombre"            type="string" />
-		<property column="wereable"          name="wearLocation"      type="int" />
 		<property column="bonusSalud"        name="bonusSalud"        type="int" />
 		<property column="bonusEnergia"      name="bonusEnergia"      type="int" />
 		<property column="bonusFuerza"       name="bonusFuerza"       type="int" />

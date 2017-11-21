@@ -4,7 +4,6 @@
 <hibernate-mapping>
 	<class name="mensajeria.PaquetePersonaje" table="personaje">
 		<id       column="idPersonaje"   name="id"            type="int"  > <generator class="increment"/> </id>
-		<property column="idInventario"  name="idInventario"  type="int" />
 		<property column="idMochila"     name="idMochila"     type="int" />
 		<property column="casta"         name="casta"         type="string" />
 		<property column="raza"          name="raza"          type="string" />

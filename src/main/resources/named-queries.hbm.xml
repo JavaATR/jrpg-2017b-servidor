@@ -4,7 +4,7 @@
 
 <hibernate-mapping>
 	<!--Comprueba si existe un usuario con ese nombre. -->
-	<query name="HQL_OBTENER_USUARIO">
+	<query name="HQL_GET_USUARIO">
 		<![CDATA[FROM mensajeria.PaqueteUsuario WHERE username = :usuario]]>
 	</query>
 	
@@ -27,11 +27,10 @@
 	<query name="HQL_GET_ITEM">
 		<![CDATA[FROM dominio.Item WHERE idItem = :idItem]]>
 	</query>
-	
-	
-	<!--Inserta una nueva mochila. 
-	<query name="HQL_INSERTAR_MOCHILA">
-		<![CDATA[INSERT INTO mochila(idMochila, item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14, item15, item16, item17, item18, item19, item20) 
-				 VALUES(:id, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)]]>
-	</query> -->
+
+	<!--Obtiene la mochila de un personaje. -->
+	<query name="HQL_GET_MOCHILA">
+		<![CDATA[FROM dominio.Mochila WHERE idMochila = :idMochila]]>
+	</query>
+
 </hibernate-mapping>
