@@ -80,6 +80,10 @@ public class Talk extends ComandosServer {
 						ponerPersonajeEnModoInvisible(idUser);
 						break;
 				}
+				
+				synchronized (Servidor.atencionConexiones) {
+					Servidor.atencionConexiones.notify();
+				}
 			} else {			
 				for (EscuchaCliente conectado : Servidor.getClientesConectados()) {
 					if (conectado.getIdPersonaje() != idUser) {
