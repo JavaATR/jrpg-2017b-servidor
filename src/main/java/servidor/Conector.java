@@ -81,6 +81,7 @@ public class Conector {
 			return true;
 		}
 		Servidor.log.append("El usuario " + user.getUsername() + " ya se encuentra en uso." + System.lineSeparator());
+		this.session.clear();
 		return false;
 	}
 
@@ -119,6 +120,7 @@ public class Conector {
 								+ " con el personaje" + paquetePersonaje.getId() + System.lineSeparator());
 			}
 		}
+		this.session.clear();
 		return false;
 	}
 
@@ -163,10 +165,12 @@ public class Conector {
 		if (!this.session.createNamedQuery("HQL_LOGUEAR_USUARIO").setParameter("usuario", user.getUsername())
 				.setParameter("password", user.getPassword()).list().isEmpty()) {
 			Servidor.log.append("El usuario " + user.getUsername() + " ha iniciado sesión." + System.lineSeparator());
+			this.session.clear();
 			return true;
 		}
 		Servidor.log.append("El usuario " + user.getUsername() + " ha realizado un intento fallido de inicio de sesión."
 				+ System.lineSeparator());
+		this.session.clear();
 		return false;
 	}
 
@@ -178,7 +182,6 @@ public class Conector {
 	 *            Personaje a guardar sus estados. <br>
 	 */
 	public final void actualizarPersonaje(final PaquetePersonaje paquetePersonaje) {
-		this.session.clear();
 		this.session.update(paquetePersonaje);
 		this.session.beginTransaction().commit();
 		Mochila mochila = (Mochila) this.session.createNamedQuery("HQL_GET_MOCHILA")
@@ -240,6 +243,7 @@ public class Conector {
 					item.getBonusEnergia(), item.getBonusFuerza(), item.getBonusDestreza(), item.getBonusInteligencia(),
 					item.getFotoEquipado(), item.getFotoEquipado());
 		}
+		this.session.clear();
 		Servidor.log.append("El personaje " + paquetePersonaje.getNombre() + " se ha actualizado con éxito."
 				+ System.lineSeparator());
 	}
@@ -321,6 +325,7 @@ public class Conector {
 					item.getBonusEnergia(), item.getBonusFuerza(), item.getBonusDestreza(), item.getBonusInteligencia(),
 					item.getFotoEquipado(), item.getFotoEquipado());
 		}
+		this.session.clear();
 		return paquetePersonaje;
 	}
 
@@ -376,6 +381,7 @@ public class Conector {
 		}
 		this.session.update(mochila);
 		this.session.beginTransaction().commit();
+		this.session.clear();
 	}
 
 	/**
