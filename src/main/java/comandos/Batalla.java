@@ -38,7 +38,8 @@ public class Batalla extends ComandosServer {
 			synchronized (Servidor.atencionConexiones) {
 				Servidor.atencionConexiones.notify();
 			}
-		} else { // Si no es NPC, es otro usuario
+		} else {
+			// Si no es NPC, es otro usuario
 			try {
 				// Seteo estado de batalla
 				Servidor.getPersonajesConectados().get(escuchaCliente.getPaqueteBatalla().getId())
